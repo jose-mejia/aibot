@@ -3,7 +3,7 @@ Modelos Pydantic para validação de dados
 """
 
 from pydantic import BaseModel, Field
-from typing import Optional, Literal
+from typing import Optional, Literal, List
 from datetime import datetime
 from enum import Enum
 
@@ -63,3 +63,14 @@ class LogEntry(BaseModel):
     message: str
     timestamp: datetime
     source: Optional[str] = None
+
+class MonitoredAsset(BaseModel):
+    """Ativo monitorado"""
+    symbol: str = Field(..., description="Par do ativo (ex: EURUSD)")
+    active: bool = Field(default=True, description="Status ativo/inativo")
+    timeframes: List[str] = Field(default=["H1"], description="Lista de timeframes configurados")
+    last_candle_time: Optional[datetime] = Field(None, description="Timestamp da última vela coletada")
+
+class AssetList(BaseModel):
+    """Lista de ativos monitorados"""
+    assets: List[MonitoredAsset] = Field(default_factory=list, max_items=5, description="Lista de ativos (máximo 5)")

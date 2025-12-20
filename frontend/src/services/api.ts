@@ -83,4 +83,25 @@ export const apiService = {
     const response = await api.post('/api/mt5/test');
     return response.data;
   },
+
+  // Ativos Monitorados
+  getAssets: async () => {
+    const response = await api.get('/api/assets');
+    return response.data;
+  },
+
+  updateAssets: async (assets: any[]) => {
+    const response = await api.post('/api/assets', assets);
+    return response.data;
+  },
+
+  collectCandles: async () => {
+    const response = await api.post('/api/assets/collect');
+    return response.data;
+  },
+
+  getAssetCandles: async (symbol: string, timeframe: string = 'H1', limit: number = 100) => {
+    const response = await api.get(`/api/assets/${symbol}/candles?timeframe=${timeframe}&limit=${limit}`);
+    return response.data;
+  },
 };

@@ -4,6 +4,7 @@ import ControlPanel from './ControlPanel';
 import ConfigPanel from './ConfigPanel';
 import OperationsPanel from './OperationsPanel';
 import LogsPanel from './LogsPanel';
+import AssetsPanel from './AssetsPanel';
 import { apiService } from '../services/api';
 
 interface DashboardProps {
@@ -12,7 +13,7 @@ interface DashboardProps {
 }
 
 const Dashboard: React.FC<DashboardProps> = ({ status, onStatusChange }) => {
-  const [activeTab, setActiveTab] = useState<'control' | 'config' | 'operations' | 'logs'>('control');
+  const [activeTab, setActiveTab] = useState<'control' | 'config' | 'operations' | 'logs' | 'assets'>('control');
   const [trades, setTrades] = useState<any[]>([]);
   const [logs, setLogs] = useState<any[]>([]);
 
@@ -69,6 +70,12 @@ const Dashboard: React.FC<DashboardProps> = ({ status, onStatusChange }) => {
         >
           📝 Logs
         </button>
+        <button
+          className={activeTab === 'assets' ? 'active' : ''}
+          onClick={() => setActiveTab('assets')}
+        >
+          📊 Ativos
+        </button>
       </div>
 
       <div className="dashboard-content">
@@ -83,6 +90,9 @@ const Dashboard: React.FC<DashboardProps> = ({ status, onStatusChange }) => {
         )}
         {activeTab === 'logs' && (
           <LogsPanel logs={logs} />
+        )}
+        {activeTab === 'assets' && (
+          <AssetsPanel />
         )}
       </div>
     </div>

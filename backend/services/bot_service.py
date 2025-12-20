@@ -14,6 +14,8 @@ from mt5.connector import MT5Connector
 from mt5.trade_manager import TradeManager
 from core_ai.ai_engine import AIEngine
 from storage.database import Database
+from services.asset_service import AssetService
+from services.candle_collector import CandleCollector
 from models.schemas import BotConfig, Trade, LogEntry, Action
 
 class BotService:
@@ -25,6 +27,8 @@ class BotService:
         self.trade_manager = TradeManager()
         self.ai_engine = AIEngine()
         self.database = Database()
+        self.asset_service = AssetService()
+        self.candle_collector = CandleCollector(self.mt5_connector, self.asset_service)
         
         # Estado
         self.running = False
@@ -158,6 +162,14 @@ class BotService:
                         self._log("ERROR", "Falha ao reconectar MT5")
                         time.sleep(10)
                         continue
+                
+                # Coletar velas de ativos monitorados (apenas velas fechadas)
+                try:
+                    collect_result = self.candle_collector.collect_all_active_assets()
+                    if collect_result.get("collected", 0) > 0:
+                        self._log("INFO", f"Coletadas {collect_result['collected']} velas de ativos monitorados")
+                except Exception as e:
+                    self._log("ERROR", f"Erro ao coletar velas: {str(e)}")
                 
                 # Verificar limite de trades simultâneos
                 open_positions = self.trade_manager.get_open_positions(

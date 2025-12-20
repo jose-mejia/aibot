@@ -48,6 +48,9 @@ data/
 *.sqlite
 # Mas manter estrutura de pastas
 !data/.gitkeep
+# Manter estrutura de market_data mas não os dados
+!data/market_data/
+data/market_data/**/*.json
 
 # Logs
 *.log
