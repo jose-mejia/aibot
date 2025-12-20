@@ -1,0 +1,43 @@
+# Configurações de atributos Git
+* text=auto
+
+# Arquivos Python
+*.py text eol=lf
+
+# Arquivos de configuração
+*.json text
+*.md text
+*.txt text
+
+# Arquivos TypeScript/JavaScript
+*.ts text eol=lf
+*.tsx text eol=lf
+*.js text eol=lf
+*.jsx text eol=lf
+
+# Arquivos CSS
+*.css text
+
+# Arquivos HTML
+*.html text
+
+# Arquivos de configuração
+*.yml text
+*.yaml text
+*.toml text
+*.ini text
+
+# Binários
+*.exe binary
+*.dll binary
+*.so binary
+*.dylib binary
+
+# Imagens
+*.png binary
+*.jpg binary
+*.jpeg binary
+*.gif binary
+*.ico binary
+*.svg text
+
