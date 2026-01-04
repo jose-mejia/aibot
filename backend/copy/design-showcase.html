@@ -1,0 +1,336 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>AIBOT Trade Copier - Design System Showcase</title>
+    <link rel="stylesheet" href="../design-system.css">
+    <style>
+        body {
+            padding: 40px;
+            max-width: 1400px;
+            margin: 0 auto;
+        }
+
+        .showcase-section {
+            margin-bottom: 60px;
+        }
+
+        .showcase-title {
+            font-size: 2rem;
+            font-weight: 700;
+            margin-bottom: 24px;
+            color: var(--primary-blue);
+        }
+
+        .showcase-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 24px;
+            margin-bottom: 24px;
+        }
+
+        .component-demo {
+            background: var(--secondary-bg);
+            padding: 24px;
+            border-radius: 12px;
+            border: 1px solid var(--border-color);
+        }
+
+        .demo-label {
+            font-size: 0.875rem;
+            color: var(--text-secondary);
+            margin-bottom: 12px;
+            font-weight: 600;
+        }
+    </style>
+</head>
+
+<body>
+    <!-- HEADER -->
+    <div style="text-align: center; margin-bottom: 60px;">
+        <h1
+            style="font-size: 3rem; background: var(--gradient-primary); -webkit-background-clip: text; -webkit-text-fill-color: transparent; margin-bottom: 16px;">
+            AIBOT Trade Copier
+        </h1>
+        <p style="color: var(--text-secondary); font-size: 1.125rem;">
+            Design System Showcase - Baseado no FinDash
+        </p>
+    </div>
+
+    <!-- BOTÕES -->
+    <section class="showcase-section">
+        <h2 class="showcase-title">Botões</h2>
+        <div class="showcase-grid">
+            <div class="component-demo">
+                <p class="demo-label">Primário</p>
+                <button class="btn btn-primary">Conectar MT5</button>
+            </div>
+            <div class="component-demo">
+                <p class="demo-label">Secundário</p>
+                <button class="btn btn-secondary">Cancelar</button>
+            </div>
+            <div class="component-demo">
+                <p class="demo-label">Sucesso</p>
+                <button class="btn btn-success">Iniciar Copier</button>
+            </div>
+            <div class="component-demo">
+                <p class="demo-label">Perigo</p>
+                <button class="btn btn-danger">Parar Tudo</button>
+            </div>
+            <div class="component-demo">
+                <p class="demo-label">Tamanhos</p>
+                <div style="display: flex; gap: 12px; flex-direction: column;">
+                    <button class="btn btn-primary btn-sm">Pequeno</button>
+                    <button class="btn btn-primary">Normal</button>
+                    <button class="btn btn-primary btn-lg">Grande</button>
+                </div>
+            </div>
+            <div class="component-demo">
+                <p class="demo-label">Desabilitado</p>
+                <button class="btn btn-primary" disabled>Desabilitado</button>
+            </div>
+        </div>
+    </section>
+
+    <!-- STAT CARDS -->
+    <section class="showcase-section">
+        <h2 class="showcase-title">Cards de Estatísticas</h2>
+        <div class="showcase-grid">
+            <div class="stat-card">
+                <div class="stat-icon">
+                    <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                            d="M12 8c-1.657 0-3 .895-3 2s1.343 2 3 2 3 .895 3 2-1.343 2-3 2m0-8c1.11 0 2.08.402 2.599 1M12 8V7m0 1v8m0 0v1m0-1c-1.11 0-2.08-.402-2.599-1M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
+                    </svg>
+                </div>
+                <div class="stat-content">
+                    <p class="stat-label">Saldo Total</p>
+                    <h3 class="stat-value">$45,231.89</h3>
+                    <span class="stat-change positive">↑ +23.1% vs mês anterior</span>
+                </div>
+            </div>
+
+            <div class="stat-card">
+                <div class="stat-icon">
+                    <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                            d="M13 7h8m0 0v8m0-8l-8 8-4-4-6 6" />
+                    </svg>
+                </div>
+                <div class="stat-content">
+                    <p class="stat-label">Ordens Ativas</p>
+                    <h3 class="stat-value">12</h3>
+                    <span class="stat-change positive">↑ +4 hoje</span>
+                </div>
+            </div>
+
+            <div class="stat-card">
+                <div class="stat-icon">
+                    <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                            d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z" />
+                    </svg>
+                </div>
+                <div class="stat-content">
+                    <p class="stat-label">Taxa de Sucesso</p>
+                    <h3 class="stat-value">94.5%</h3>
+                    <span class="stat-change positive">↑ +2.3% esta semana</span>
+                </div>
+            </div>
+
+            <div class="stat-card">
+                <div class="stat-icon">
+                    <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                            d="M12 8v13m0-13V6a2 2 0 112 2h-2zm0 0V5.5A2.5 2.5 0 109.5 8H12zm-7 4h14M5 12a2 2 0 110-4h14a2 2 0 110 4M5 12v7a2 2 0 002 2h10a2 2 0 002-2v-7" />
+                    </svg>
+                </div>
+                <div class="stat-content">
+                    <p class="stat-label">Lucro Diário</p>
+                    <h3 class="stat-value">+$1,250.00</h3>
+                    <span class="stat-change positive">↑ +15.2% vs ontem</span>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- BADGES -->
+    <section class="showcase-section">
+        <h2 class="showcase-title">Badges de Status</h2>
+        <div class="showcase-grid">
+            <div class="component-demo">
+                <p class="demo-label">Conectado</p>
+                <span class="badge badge-success">● Conectado</span>
+            </div>
+            <div class="component-demo">
+                <p class="demo-label">Desconectado</p>
+                <span class="badge badge-error">● Desconectado</span>
+            </div>
+            <div class="component-demo">
+                <p class="demo-label">Processando</p>
+                <span class="badge badge-warning">● Processando</span>
+            </div>
+            <div class="component-demo">
+                <p class="demo-label">Info</p>
+                <span class="badge badge-info">ℹ Aguardando</span>
+            </div>
+        </div>
+    </section>
+
+    <!-- INPUTS -->
+    <section class="showcase-section">
+        <h2 class="showcase-title">Inputs</h2>
+        <div class="showcase-grid">
+            <div class="component-demo">
+                <div class="input-group">
+                    <label class="input-label">Login MT5</label>
+                    <input type="text" class="input" placeholder="Digite seu login...">
+                </div>
+            </div>
+            <div class="component-demo">
+                <div class="input-group">
+                    <label class="input-label">Senha</label>
+                    <input type="password" class="input" placeholder="••••••••">
+                </div>
+            </div>
+            <div class="component-demo">
+                <div class="input-group">
+                    <label class="input-label">Servidor</label>
+                    <input type="text" class="input" value="ICMarketsSC-MT5-2">
+                </div>
+            </div>
+            <div class="component-demo">
+                <div class="input-group">
+                    <label class="input-label">Volume Fixo</label>
+                    <input type="number" class="input" value="0.01" step="0.01">
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- CARDS -->
+    <section class="showcase-section">
+        <h2 class="showcase-title">Cards</h2>
+        <div class="showcase-grid">
+            <div class="card">
+                <div class="card-header">
+                    <h3 class="card-title">Conexão MT5</h3>
+                    <span class="badge badge-success">● Ativo</span>
+                </div>
+                <div class="card-body">
+                    <p style="margin-bottom: 12px;">Conta: <strong>7409735</strong></p>
+                    <p style="margin-bottom: 12px;">Servidor: <strong>ICMarketsSC-MT5-2</strong></p>
+                    <p>Balance: <strong style="color: var(--success);">$12,450.00</strong></p>
+                </div>
+            </div>
+
+            <div class="card">
+                <div class="card-header">
+                    <h3 class="card-title">Safety Rules</h3>
+                    <span class="badge badge-info">ℹ Ativo</span>
+                </div>
+                <div class="card-body">
+                    <p style="margin-bottom: 8px;">✓ Max Slippage: 50 pts</p>
+                    <p style="margin-bottom: 8px;">✓ Max Spread: 20 pts</p>
+                    <p style="margin-bottom: 8px;">✓ Max Trades: 5</p>
+                    <p>✓ Max Drawdown: 10%</p>
+                </div>
+            </div>
+
+            <div class="card">
+                <div class="card-header">
+                    <h3 class="card-title">Última Ordem</h3>
+                </div>
+                <div class="card-body">
+                    <p style="margin-bottom: 8px;"><strong>EURUSD</strong> - BUY 0.10</p>
+                    <p style="margin-bottom: 8px;">Entry: 1.0850</p>
+                    <p style="margin-bottom: 8px;">SL: 1.0800 | TP: 1.0900</p>
+                    <p style="color: var(--success);">P/L: +$125.00</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- PROGRESS BAR -->
+    <section class="showcase-section">
+        <h2 class="showcase-title">Progress Bars</h2>
+        <div class="showcase-grid">
+            <div class="component-demo">
+                <p class="demo-label">Uso de Margem (65%)</p>
+                <div class="progress-bar">
+                    <div class="progress-fill" style="width: 65%;"></div>
+                </div>
+            </div>
+            <div class="component-demo">
+                <p class="demo-label">Taxa de Sucesso (94%)</p>
+                <div class="progress-bar">
+                    <div class="progress-fill" style="width: 94%;"></div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- TABELA -->
+    <section class="showcase-section">
+        <h2 class="showcase-title">Tabela de Ordens</h2>
+        <div class="table-container">
+            <table class="table">
+                <thead>
+                    <tr>
+                        <th>Ticket</th>
+                        <th>Símbolo</th>
+                        <th>Tipo</th>
+                        <th>Volume</th>
+                        <th>Entry</th>
+                        <th>SL/TP</th>
+                        <th>P/L</th>
+                        <th>Status</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td>#123456</td>
+                        <td><strong>EURUSD</strong></td>
+                        <td>BUY</td>
+                        <td>0.10</td>
+                        <td>1.0850</td>
+                        <td>1.0800 / 1.0900</td>
+                        <td style="color: var(--success);">+$125.00</td>
+                        <td><span class="badge badge-success">Aberto</span></td>
+                    </tr>
+                    <tr>
+                        <td>#123457</td>
+                        <td><strong>BTCUSD</strong></td>
+                        <td>SELL</td>
+                        <td>0.01</td>
+                        <td>42,500</td>
+                        <td>43,000 / 42,000</td>
+                        <td style="color: var(--success);">+$50.00</td>
+                        <td><span class="badge badge-success">Aberto</span></td>
+                    </tr>
+                    <tr>
+                        <td>#123458</td>
+                        <td><strong>XAUUSD</strong></td>
+                        <td>BUY</td>
+                        <td>0.05</td>
+                        <td>2,050.00</td>
+                        <td>2,040.00 / 2,070.00</td>
+                        <td style="color: var(--error);">-$25.00</td>
+                        <td><span class="badge badge-warning">Pendente</span></td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+    </section>
+
+    <!-- FOOTER -->
+    <div style="text-align: center; margin-top: 80px; padding: 40px; border-top: 1px solid var(--border-color);">
+        <p style="color: var(--text-secondary);">
+            AIBOT Trade Copier © 2026 - Design System v1.0
+        </p>
+    </div>
+</body>
+
+</html>

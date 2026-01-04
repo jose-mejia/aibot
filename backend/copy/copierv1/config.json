@@ -1,0 +1,27 @@
+{
+    "system": {
+        "tick_interval_ms": 100,
+        "connection_timeout_sec": 30,
+        "valid_symbol_mapping": true,
+        "log_level": "INFO"
+    },
+    "safety": {
+        "max_drawdown_percent": 10.0
+    },
+    "trade_copy": {
+        "max_slippage_points": 100,
+        "max_spread_points": 50,
+        "max_exposure_trades": 5,
+        "max_exposure_lots": 10.0,
+        "mode": "identical",
+        "min_lot": 0.01,
+        "max_lot": 5.0,
+        "close_retries": 3,
+        "magic_number_master": 0,
+        "magic_number_copier": 888888
+    },
+    "paths": {
+        "db_file": "copied_orders.json",
+        "log_file": "copier.log"
+    }
+}

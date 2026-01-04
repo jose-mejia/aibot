@@ -1,0 +1,18 @@
+{
+    "master": {
+        "login": 7409735,
+        "password": "Euamojesus@123",
+        "server": "ICMarketsSC-MT5-2",
+        "path": "C:\\Program Files\\IC Markets Global01\\terminal64.exe"
+    },
+    "followers": [
+        {
+            "name": "account02",
+            "login": 11629107,
+            "password": "Euamojesus@123",
+            "server": "ICMarketsSC-MT5-4",
+            "path": "C:\\Program Files\\MT5FUNDINGPIPS\\terminal64.exe",
+            "mode": "identical"
+        }
+    ]
+}

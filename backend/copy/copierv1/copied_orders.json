@@ -1,0 +1,1343 @@
+{
+    "888118882": {
+        "follower_ticket": 3923962271,
+        "symbol": "GBPUSD",
+        "action": "SELL",
+        "volume": 0.05,
+        "status": "CLOSED",
+        "timestamp": "2025-12-30T07:34:22.532434",
+        "closed_at": "2025-12-30T07:41:59.804514"
+    },
+    "888119511": {
+        "follower_ticket": 3923962629,
+        "symbol": "USDJPY",
+        "action": "SELL",
+        "volume": 0.1,
+        "status": "CLOSED",
+        "timestamp": "2025-12-30T07:35:48.267719",
+        "closed_at": "2025-12-30T07:42:01.073268"
+    },
+    "888119960": {
+        "follower_ticket": 3923962918,
+        "symbol": "USDCHF",
+        "action": "SELL",
+        "volume": 0.05,
+        "status": "CLOSED",
+        "timestamp": "2025-12-30T07:36:42.381500",
+        "closed_at": "2025-12-30T07:41:03.056646"
+    },
+    "888124595": {
+        "follower_ticket": 3923965379,
+        "symbol": "EURUSD",
+        "action": "SELL",
+        "volume": 0.01,
+        "status": "CLOSED",
+        "timestamp": "2025-12-30T07:45:20.077142",
+        "closed_at": "2025-12-30T07:45:28.966433"
+    },
+    "888141560": {
+        "follower_ticket": 3923973841,
+        "symbol": "EURUSD",
+        "action": "SELL",
+        "volume": 0.01,
+        "status": "CLOSED",
+        "timestamp": "2025-12-30T08:27:41.660272",
+        "closed_at": "2025-12-30T08:28:24.871934"
+    },
+    "888141636": {
+        "follower_ticket": 3923973865,
+        "symbol": "EURUSD",
+        "action": "SELL",
+        "volume": 0.01,
+        "status": "CLOSED",
+        "timestamp": "2025-12-30T08:28:05.298712",
+        "closed_at": "2025-12-30T08:28:26.768185"
+    },
+    "888148397": {
+        "follower_ticket": 3923977758,
+        "symbol": "GBPUSD",
+        "action": "SELL",
+        "volume": 0.01,
+        "status": "CLOSED",
+        "timestamp": "2025-12-30T08:49:14.124133",
+        "closed_at": "2025-12-30T08:49:23.424005"
+    },
+    "888153558": {
+        "follower_ticket": 3923980861,
+        "symbol": "EURUSD",
+        "action": "SELL",
+        "volume": 0.1,
+        "status": "CLOSED",
+        "timestamp": "2025-12-30T09:03:02.581554",
+        "closed_at": "2025-12-30T09:05:03.083106"
+    },
+    "888164895": {
+        "follower_ticket": 3923987473,
+        "symbol": "USDJPY",
+        "action": "SELL",
+        "volume": 0.1,
+        "status": "CLOSED",
+        "timestamp": "2025-12-30T09:22:50.788273",
+        "closed_at": "2025-12-30T10:29:49.657230"
+    },
+    "888164916": {
+        "follower_ticket": 3923987487,
+        "symbol": "USDCHF",
+        "action": "SELL",
+        "volume": 0.05,
+        "status": "CLOSED",
+        "timestamp": "2025-12-30T09:22:55.389828",
+        "closed_at": "2025-12-30T09:34:08.418163"
+    },
+    "888164978": {
+        "follower_ticket": 3923987540,
+        "symbol": "EURUSD",
+        "action": "SELL",
+        "volume": 0.1,
+        "status": "CLOSED",
+        "timestamp": "2025-12-30T09:23:09.889541",
+        "closed_at": "2025-12-30T09:28:24.467946"
+    },
+    "888167264": {
+        "follower_ticket": 3923988991,
+        "symbol": "USDCAD",
+        "action": "SELL",
+        "volume": 0.05,
+        "status": "CLOSED",
+        "timestamp": "2025-12-30T09:27:11.454781",
+        "closed_at": "2025-12-30T09:57:02.300300"
+    },
+    "888175515": {
+        "follower_ticket": 3923993821,
+        "symbol": "EURUSD",
+        "action": "SELL",
+        "volume": 0.1,
+        "status": "CLOSED",
+        "timestamp": "2025-12-30T09:43:42.575167",
+        "closed_at": "2025-12-30T09:57:25.634293"
+    },
+    "888175564": {
+        "follower_ticket": 3923993874,
+        "symbol": "USDCHF",
+        "action": "SELL",
+        "volume": 0.05,
+        "status": "CLOSED",
+        "timestamp": "2025-12-30T09:43:55.358094",
+        "closed_at": "2025-12-30T09:57:37.466790"
+    },
+    "888177007": {
+        "follower_ticket": 3923997358,
+        "symbol": "GBPUSD",
+        "action": "SELL",
+        "volume": 0.05,
+        "status": "CLOSED",
+        "timestamp": "2025-12-30T09:57:01.795411",
+        "closed_at": "2025-12-30T09:57:23.456378"
+    },
+    "888180055": {
+        "follower_ticket": 3923997360,
+        "symbol": "GBPUSD",
+        "action": "SELL",
+        "volume": 0.05,
+        "status": "CLOSED",
+        "timestamp": "2025-12-30T09:57:01.965139",
+        "closed_at": "2025-12-30T09:57:21.250843"
+    },
+    "888177266": {
+        "follower_ticket": 3923997361,
+        "symbol": "EURUSD",
+        "action": "SELL",
+        "volume": 0.1,
+        "status": "CLOSED",
+        "timestamp": "2025-12-30T09:57:02.117646",
+        "closed_at": "2025-12-30T10:18:14.903846"
+    },
+    "888177354": {
+        "follower_ticket": 3923997362,
+        "symbol": "USDCHF",
+        "action": "SELL",
+        "volume": 0.05,
+        "status": "CLOSED",
+        "timestamp": "2025-12-30T09:57:02.280298",
+        "closed_at": "2025-12-30T10:59:23.249915"
+    },
+    "888181465": {
+        "follower_ticket": 3923997505,
+        "symbol": "GBPUSD",
+        "action": "SELL",
+        "volume": 0.05,
+        "status": "CLOSED",
+        "timestamp": "2025-12-30T09:57:31.983876",
+        "closed_at": "2025-12-30T10:29:57.476239"
+    },
+    "888182506": {
+        "follower_ticket": 3923998368,
+        "symbol": "GBPUSD",
+        "action": "SELL",
+        "volume": 0.05,
+        "status": "CLOSED",
+        "timestamp": "2025-12-30T09:58:35.395973",
+        "closed_at": "2025-12-30T10:13:56.774576"
+    },
+    "888183691": {
+        "follower_ticket": 3923998999,
+        "symbol": "EURUSD",
+        "action": "SELL",
+        "volume": 0.1,
+        "status": "CLOSED",
+        "timestamp": "2025-12-30T10:00:16.536970",
+        "closed_at": "2025-12-30T11:14:29.672714"
+    },
+    "888184273": {
+        "follower_ticket": 3924003649,
+        "symbol": "USDCHF",
+        "action": "SELL",
+        "volume": 0.05,
+        "status": "CLOSED",
+        "timestamp": "2025-12-30T10:13:56.757524",
+        "closed_at": "2025-12-30T11:17:54.593698"
+    },
+    "888196047": {
+        "follower_ticket": 3924006013,
+        "symbol": "EURUSD",
+        "action": "SELL",
+        "volume": 0.1,
+        "status": "CLOSED",
+        "timestamp": "2025-12-30T10:19:45.663758",
+        "closed_at": "2025-12-30T10:29:56.520764"
+    },
+    "888196281": {
+        "follower_ticket": 3924006021,
+        "symbol": "GBPUSD",
+        "action": "SELL",
+        "volume": 0.05,
+        "status": "CLOSED",
+        "timestamp": "2025-12-30T10:19:45.815528",
+        "closed_at": "2025-12-30T11:17:42.629514"
+    },
+    "888206964": {
+        "follower_ticket": 3924011978,
+        "symbol": "EURUSD",
+        "action": "SELL",
+        "volume": 0.1,
+        "status": "CLOSED",
+        "timestamp": "2025-12-30T10:31:35.255417",
+        "closed_at": "2025-12-30T10:59:23.270059"
+    },
+    "888212366": {
+        "follower_ticket": 3924019038,
+        "symbol": "GBPUSD",
+        "action": "SELL",
+        "volume": 0.05,
+        "status": "CLOSED",
+        "timestamp": "2025-12-30T10:44:26.119806",
+        "closed_at": "2025-12-30T11:18:02.860615"
+    },
+    "888223229": {
+        "follower_ticket": 3924025524,
+        "symbol": "EURUSD",
+        "action": "SELL",
+        "volume": 0.1,
+        "status": "CLOSED",
+        "timestamp": "2025-12-30T10:59:22.464316",
+        "closed_at": "2025-12-30T11:01:57.799666"
+    },
+    "888225739": {
+        "follower_ticket": 3924025529,
+        "symbol": "USDCAD",
+        "action": "SELL",
+        "volume": 0.05,
+        "status": "CLOSED",
+        "timestamp": "2025-12-30T10:59:22.642476",
+        "closed_at": "2025-12-30T11:08:14.429743"
+    },
+    "888225741": {
+        "follower_ticket": 3924025533,
+        "symbol": "USDCAD",
+        "action": "SELL",
+        "volume": 0.05,
+        "status": "CLOSED",
+        "timestamp": "2025-12-30T10:59:22.820496",
+        "closed_at": "2025-12-30T11:08:13.614476"
+    },
+    "888225918": {
+        "follower_ticket": 3924025537,
+        "symbol": "USDJPY",
+        "action": "SELL",
+        "volume": 0.1,
+        "status": "CLOSED",
+        "timestamp": "2025-12-30T10:59:23.034608",
+        "closed_at": "2025-12-30T11:01:49.249688"
+    },
+    "888226373": {
+        "follower_ticket": 3924025544,
+        "symbol": "USDCHF",
+        "action": "SELL",
+        "volume": 0.1,
+        "status": "CLOSED",
+        "timestamp": "2025-12-30T10:59:23.242511",
+        "closed_at": "2025-12-30T11:17:47.819563"
+    },
+    "888232313": {
+        "follower_ticket": 3924028485,
+        "symbol": "EURUSD",
+        "action": "SELL",
+        "volume": 0.1,
+        "status": "CLOSED",
+        "timestamp": "2025-12-30T11:05:05.279697",
+        "closed_at": "2025-12-30T11:14:39.022489"
+    },
+    "888233831": {
+        "follower_ticket": 3924029426,
+        "symbol": "USDCAD",
+        "action": "SELL",
+        "volume": 0.05,
+        "status": "CLOSED",
+        "timestamp": "2025-12-30T11:08:21.410745",
+        "closed_at": "2025-12-30T11:36:19.460544"
+    },
+    "888236050": {
+        "follower_ticket": 3924031086,
+        "symbol": "USDCAD",
+        "action": "SELL",
+        "volume": 0.05,
+        "status": "CLOSED",
+        "timestamp": "2025-12-30T11:13:05.000137",
+        "closed_at": "2025-12-30T11:17:27.660667"
+    },
+    "888236853": {
+        "follower_ticket": 3924031577,
+        "symbol": "EURUSD",
+        "action": "SELL",
+        "volume": 0.1,
+        "status": "CLOSED",
+        "timestamp": "2025-12-30T11:14:34.804088",
+        "closed_at": "2025-12-30T11:36:23.430053"
+    },
+    "888240172": {
+        "follower_ticket": 3924033598,
+        "symbol": "USDCHF",
+        "action": "SELL",
+        "volume": 0.05,
+        "status": "CLOSED",
+        "timestamp": "2025-12-30T11:18:54.354687",
+        "closed_at": "2025-12-30T11:30:52.692487"
+    },
+    "888257242": {
+        "follower_ticket": 3924043880,
+        "symbol": "EURUSD",
+        "action": "SELL",
+        "volume": 0.1,
+        "status": "CLOSED",
+        "timestamp": "2025-12-30T11:37:26.392899",
+        "closed_at": "2025-12-30T11:39:28.814377"
+    },
+    "888260583": {
+        "follower_ticket": 3924045937,
+        "symbol": "GBPUSD",
+        "action": "SELL",
+        "volume": 0.05,
+        "status": "CLOSED",
+        "timestamp": "2025-12-30T11:39:41.229876",
+        "closed_at": "2025-12-30T11:46:30.283291"
+    },
+    "888273473": {
+        "follower_ticket": 3924053620,
+        "symbol": "USDCHF",
+        "action": "SELL",
+        "volume": 0.05,
+        "status": "CLOSED",
+        "timestamp": "2025-12-30T11:47:49.048424",
+        "closed_at": "2025-12-30T11:49:19.377325"
+    },
+    "888273697": {
+        "follower_ticket": 3924053769,
+        "symbol": "USDJPY",
+        "action": "SELL",
+        "volume": 0.05,
+        "status": "CLOSED",
+        "timestamp": "2025-12-30T11:48:00.550122",
+        "closed_at": "2025-12-30T11:48:01.791494"
+    },
+    "888273756": {
+        "follower_ticket": 3924053801,
+        "symbol": "USDJPY",
+        "action": "SELL",
+        "volume": 0.05,
+        "status": "CLOSED",
+        "timestamp": "2025-12-30T11:48:04.362307",
+        "closed_at": "2025-12-30T11:49:18.102597"
+    },
+    "888276512": {
+        "follower_ticket": 3924055409,
+        "symbol": "GBPUSD",
+        "action": "SELL",
+        "volume": 0.05,
+        "status": "CLOSED",
+        "timestamp": "2025-12-30T11:50:20.247068",
+        "closed_at": "2025-12-30T11:50:53.982863"
+    },
+    "888280033": {
+        "follower_ticket": 3924057575,
+        "symbol": "EURUSD",
+        "action": "SELL",
+        "volume": 0.01,
+        "status": "CLOSED",
+        "timestamp": "2025-12-30T11:53:45.381906",
+        "closed_at": "2025-12-30T11:54:29.241157"
+    },
+    "888280705": {
+        "follower_ticket": 3924058007,
+        "symbol": "USDJPY",
+        "action": "SELL",
+        "volume": 0.1,
+        "status": "CLOSED",
+        "timestamp": "2025-12-30T11:54:17.106259",
+        "closed_at": "2025-12-30T12:16:10.252401"
+    },
+    "888290027": {
+        "follower_ticket": 3924070156,
+        "symbol": "USDJPY",
+        "action": "SELL",
+        "volume": 0.1,
+        "status": "CLOSED",
+        "timestamp": "2025-12-30T12:16:09.405026",
+        "closed_at": "2025-12-30T12:32:00.023326"
+    },
+    "888299073": {
+        "follower_ticket": 3924070157,
+        "symbol": "EURUSD",
+        "action": "SELL",
+        "volume": 0.05,
+        "status": "CLOSED",
+        "timestamp": "2025-12-30T12:16:09.592771",
+        "closed_at": "2025-12-30T12:43:20.039859"
+    },
+    "888299104": {
+        "follower_ticket": 3924070160,
+        "symbol": "USDCHF",
+        "action": "SELL",
+        "volume": 0.05,
+        "status": "CLOSED",
+        "timestamp": "2025-12-30T12:16:09.799570",
+        "closed_at": "2025-12-30T12:32:08.192991"
+    },
+    "888300015": {
+        "follower_ticket": 3924070161,
+        "symbol": "USDCAD",
+        "action": "SELL",
+        "volume": 0.05,
+        "status": "CLOSED",
+        "timestamp": "2025-12-30T12:16:10.242441",
+        "closed_at": "2025-12-30T12:50:08.139989"
+    },
+    "888290117": {
+        "follower_ticket": 3924063546,
+        "symbol": "GBPUSD",
+        "action": "SELL",
+        "volume": 0.05,
+        "status": "CLOSED",
+        "timestamp": "2025-12-30T12:16:16.700400",
+        "closed_at": "2025-12-30T12:32:00.039575"
+    },
+    "888300661": {
+        "follower_ticket": 3924069548,
+        "symbol": "EURUSD",
+        "action": "SELL",
+        "volume": 0.1,
+        "status": "CLOSED",
+        "timestamp": "2025-12-30T12:16:16.721400",
+        "closed_at": "2025-12-30T12:32:00.057375"
+    },
+    "888302606": {
+        "follower_ticket": 3924070612,
+        "symbol": "GBPUSD",
+        "action": "SELL",
+        "volume": 0.05,
+        "status": "CLOSED",
+        "timestamp": "2025-12-30T12:17:19.601581",
+        "closed_at": "2025-12-30T12:35:18.199964"
+    },
+    "888312888": {
+        "follower_ticket": 3924076213,
+        "symbol": "USDCHF",
+        "action": "SELL",
+        "volume": 0.05,
+        "status": "CLOSED",
+        "timestamp": "2025-12-30T12:28:52.061438",
+        "closed_at": "2025-12-30T12:32:08.489739"
+    },
+    "888317061": {
+        "follower_ticket": 3924078615,
+        "symbol": "USDCHF",
+        "action": "SELL",
+        "volume": 0.05,
+        "status": "CLOSED",
+        "timestamp": "2025-12-30T12:33:48.520455",
+        "closed_at": "2025-12-30T12:44:20.982864"
+    },
+    "888320871": {
+        "follower_ticket": 3924080706,
+        "symbol": "EURUSD",
+        "action": "SELL",
+        "volume": 0.05,
+        "status": "CLOSED",
+        "timestamp": "2025-12-30T12:39:29.156635",
+        "closed_at": "2025-12-30T12:43:31.506076"
+    },
+    "888320901": {
+        "follower_ticket": 3924080774,
+        "symbol": "GBPUSD",
+        "action": "SELL",
+        "volume": 0.05,
+        "status": "CLOSED",
+        "timestamp": "2025-12-30T12:39:38.130012",
+        "closed_at": "2025-12-30T12:44:20.995089"
+    },
+    "888320984": {
+        "follower_ticket": 3924080782,
+        "symbol": "USDJPY",
+        "action": "SELL",
+        "volume": 0.05,
+        "status": "CLOSED",
+        "timestamp": "2025-12-30T12:39:40.051561",
+        "closed_at": "2025-12-30T12:44:21.007323"
+    },
+    "888324937": {
+        "follower_ticket": 3924083197,
+        "symbol": "EURUSD",
+        "action": "SELL",
+        "volume": 0.1,
+        "status": "CLOSED",
+        "timestamp": "2025-12-30T12:43:34.920645",
+        "closed_at": "2025-12-30T12:44:21.221203"
+    },
+    "888326790": {
+        "follower_ticket": 3924084185,
+        "symbol": "USDJPY",
+        "action": "SELL",
+        "volume": 0.05,
+        "status": "CLOSED",
+        "timestamp": "2025-12-30T12:46:01.368169",
+        "closed_at": "2025-12-30T12:49:20.551342"
+    },
+    "888326852": {
+        "follower_ticket": 3924084217,
+        "symbol": "EURUSD",
+        "action": "SELL",
+        "volume": 0.05,
+        "status": "CLOSED",
+        "timestamp": "2025-12-30T12:46:09.483878",
+        "closed_at": "2025-12-30T12:49:20.565177"
+    },
+    "888328433": {
+        "follower_ticket": 3924084830,
+        "symbol": "GBPUSD",
+        "action": "SELL",
+        "volume": 0.05,
+        "status": "CLOSED",
+        "timestamp": "2025-12-30T12:47:45.841121",
+        "closed_at": "2025-12-30T12:49:20.579900"
+    },
+    "888334572_11596665": {
+        "master_ticket": 888334572,
+        "follower_ticket": 3924087069,
+        "follower_login": 11596665,
+        "symbol": "GBPUSD",
+        "action": "SELL",
+        "volume": 0.01,
+        "status": "CLOSED",
+        "timestamp": "2025-12-30T12:54:30.532119",
+        "closed_at": "2025-12-30T14:13:47.060594"
+    },
+    "888334572_11629107": {
+        "master_ticket": 888334572,
+        "follower_ticket": 3924087066,
+        "follower_login": 11629107,
+        "symbol": "GBPUSD",
+        "action": "SELL",
+        "volume": 0.01,
+        "status": "CLOSED",
+        "timestamp": "2025-12-30T12:54:34.421597",
+        "closed_at": "2025-12-30T14:13:49.043670"
+    },
+    "888334572_11671434": {
+        "master_ticket": 888334572,
+        "follower_ticket": 143245025,
+        "follower_login": 11671434,
+        "symbol": "GBPUSD",
+        "action": "SELL",
+        "volume": 0.01,
+        "status": "CLOSED",
+        "timestamp": "2025-12-30T12:54:37.144050",
+        "closed_at": "2025-12-30T14:13:51.140033"
+    },
+    "888334572_7361813": {
+        "master_ticket": 888334572,
+        "follower_ticket": 888334697,
+        "follower_login": 7361813,
+        "symbol": "GBPUSD",
+        "action": "SELL",
+        "volume": 0.01,
+        "status": "CLOSED",
+        "timestamp": "2025-12-30T12:54:39.280628",
+        "closed_at": "2025-12-30T14:13:53.584928"
+    },
+    "888335635_11596665": {
+        "master_ticket": 888335635,
+        "follower_ticket": 3924087571,
+        "follower_login": 11596665,
+        "symbol": "GBPUSD",
+        "action": "SELL",
+        "volume": 0.01,
+        "status": "CLOSED",
+        "timestamp": "2025-12-30T12:56:03.547410",
+        "closed_at": "2025-12-30T14:13:47.075820"
+    },
+    "888335635_11629107": {
+        "master_ticket": 888335635,
+        "follower_ticket": 3924087524,
+        "follower_login": 11629107,
+        "symbol": "GBPUSD",
+        "action": "SELL",
+        "volume": 0.01,
+        "status": "CLOSED",
+        "timestamp": "2025-12-30T12:56:10.291553",
+        "closed_at": "2025-12-30T14:13:49.063365"
+    },
+    "888335635_11671434": {
+        "master_ticket": 888335635,
+        "follower_ticket": 143245626,
+        "follower_login": 11671434,
+        "symbol": "GBPUSD",
+        "action": "SELL",
+        "volume": 0.01,
+        "status": "CLOSED",
+        "timestamp": "2025-12-30T12:56:16.603392",
+        "closed_at": "2025-12-30T14:13:51.159418"
+    },
+    "888335635_7361813": {
+        "master_ticket": 888335635,
+        "follower_ticket": 888335993,
+        "follower_login": 7361813,
+        "symbol": "GBPUSD",
+        "action": "SELL",
+        "volume": 0.01,
+        "status": "CLOSED",
+        "timestamp": "2025-12-30T12:56:19.615217",
+        "closed_at": "2025-12-30T14:13:53.601923"
+    },
+    "888335943_11596665": {
+        "master_ticket": 888335943,
+        "follower_ticket": 3924088057,
+        "follower_login": 11596665,
+        "symbol": "EURUSD",
+        "action": "SELL",
+        "volume": 0.05,
+        "status": "CLOSED",
+        "timestamp": "2025-12-30T12:57:32.848207",
+        "closed_at": "2025-12-30T14:13:47.090481"
+    },
+    "888335943_11629107": {
+        "master_ticket": 888335943,
+        "follower_ticket": 3924087666,
+        "follower_login": 11629107,
+        "symbol": "EURUSD",
+        "action": "SELL",
+        "volume": 0.05,
+        "status": "CLOSED",
+        "timestamp": "2025-12-30T12:57:35.921279",
+        "closed_at": "2025-12-30T14:13:49.082475"
+    },
+    "888335943_11671434": {
+        "master_ticket": 888335943,
+        "follower_ticket": 143246014,
+        "follower_login": 11671434,
+        "symbol": "EURUSD",
+        "action": "SELL",
+        "volume": 0.05,
+        "status": "CLOSED",
+        "timestamp": "2025-12-30T12:57:39.085950",
+        "closed_at": "2025-12-30T14:13:51.173289"
+    },
+    "888335943_7361813": {
+        "master_ticket": 888335943,
+        "follower_ticket": 888337144,
+        "follower_login": 7361813,
+        "symbol": "EURUSD",
+        "action": "SELL",
+        "volume": 0.05,
+        "status": "CLOSED",
+        "timestamp": "2025-12-30T12:57:41.941215",
+        "closed_at": "2025-12-30T14:13:53.615920"
+    },
+    "888347161_11596665": {
+        "master_ticket": 888347161,
+        "follower_ticket": 3924094720,
+        "follower_login": 11596665,
+        "symbol": "GBPUSD",
+        "action": "SELL",
+        "volume": 0.05,
+        "status": "CLOSED",
+        "timestamp": "2025-12-30T13:13:15.435193",
+        "closed_at": "2025-12-30T14:13:47.104481"
+    },
+    "888340917_11629107": {
+        "master_ticket": 888340917,
+        "follower_ticket": 3924090168,
+        "follower_login": 11629107,
+        "symbol": "GBPUSD",
+        "action": "SELL",
+        "volume": 0.05,
+        "status": "CLOSED",
+        "timestamp": "2025-12-30T13:13:17.640662",
+        "closed_at": "2025-12-30T14:13:49.097477"
+    },
+    "888347161_11629107": {
+        "master_ticket": 888347161,
+        "follower_ticket": 3924094730,
+        "follower_login": 11629107,
+        "symbol": "GBPUSD",
+        "action": "SELL",
+        "volume": 0.05,
+        "status": "CLOSED",
+        "timestamp": "2025-12-30T13:13:17.902213",
+        "closed_at": "2025-12-30T14:13:49.112095"
+    },
+    "888347257_11629107": {
+        "master_ticket": 888347257,
+        "follower_ticket": 3924094733,
+        "follower_login": 11629107,
+        "symbol": "USDJPY",
+        "action": "SELL",
+        "volume": 0.05,
+        "status": "CLOSED",
+        "timestamp": "2025-12-30T13:13:18.111502",
+        "closed_at": "2025-12-30T14:13:49.125611"
+    },
+    "888347378_11629107": {
+        "master_ticket": 888347378,
+        "follower_ticket": 3924094734,
+        "follower_login": 11629107,
+        "symbol": "EURUSD",
+        "action": "SELL",
+        "volume": 0.05,
+        "status": "CLOSED",
+        "timestamp": "2025-12-30T13:13:18.292724",
+        "closed_at": "2025-12-30T14:13:49.140216"
+    },
+    "888347161_11671434": {
+        "master_ticket": 888347161,
+        "follower_ticket": 143251825,
+        "follower_login": 11671434,
+        "symbol": "GBPUSD",
+        "action": "SELL",
+        "volume": 0.05,
+        "status": "CLOSED",
+        "timestamp": "2025-12-30T13:13:20.716332",
+        "closed_at": "2025-12-30T14:13:51.186950"
+    },
+    "888347257_11671434": {
+        "master_ticket": 888347257,
+        "follower_ticket": 143251829,
+        "follower_login": 11671434,
+        "symbol": "USDJPY",
+        "action": "SELL",
+        "volume": 0.05,
+        "status": "CLOSED",
+        "timestamp": "2025-12-30T13:13:21.021236",
+        "closed_at": "2025-12-30T14:13:51.205197"
+    },
+    "888347378_11671434": {
+        "master_ticket": 888347378,
+        "follower_ticket": 143251831,
+        "follower_login": 11671434,
+        "symbol": "EURUSD",
+        "action": "SELL",
+        "volume": 0.05,
+        "status": "CLOSED",
+        "timestamp": "2025-12-30T13:13:21.324620",
+        "closed_at": "2025-12-30T14:13:51.221199"
+    },
+    "888347161_7361813": {
+        "master_ticket": 888347161,
+        "follower_ticket": 888349476,
+        "follower_login": 7361813,
+        "symbol": "GBPUSD",
+        "action": "SELL",
+        "volume": 0.05,
+        "status": "CLOSED",
+        "timestamp": "2025-12-30T13:13:25.314443",
+        "closed_at": "2025-12-30T14:13:53.630432"
+    },
+    "888347257_7361813": {
+        "master_ticket": 888347257,
+        "follower_ticket": 888349478,
+        "follower_login": 7361813,
+        "symbol": "USDJPY",
+        "action": "SELL",
+        "volume": 0.05,
+        "status": "CLOSED",
+        "timestamp": "2025-12-30T13:13:25.546509",
+        "closed_at": "2025-12-30T14:13:53.644004"
+    },
+    "888347378_7361813": {
+        "master_ticket": 888347378,
+        "follower_ticket": 888349480,
+        "follower_login": 7361813,
+        "symbol": "EURUSD",
+        "action": "SELL",
+        "volume": 0.05,
+        "status": "CLOSED",
+        "timestamp": "2025-12-30T13:13:25.769616",
+        "closed_at": "2025-12-30T14:13:53.658011"
+    },
+    "888347257_11596665": {
+        "master_ticket": 888347257,
+        "follower_ticket": 3924094958,
+        "follower_login": 11596665,
+        "symbol": "USDJPY",
+        "action": "SELL",
+        "volume": 0.05,
+        "status": "CLOSED",
+        "timestamp": "2025-12-30T13:13:51.766221",
+        "closed_at": "2025-12-30T14:13:47.121719"
+    },
+    "888359393_11596665": {
+        "master_ticket": 888359393,
+        "follower_ticket": 3924100315,
+        "follower_login": 11596665,
+        "symbol": "EURUSD",
+        "action": "SELL",
+        "volume": 0.03,
+        "status": "CLOSED",
+        "timestamp": "2025-12-30T13:29:20.393363",
+        "closed_at": "2025-12-30T14:13:47.137721"
+    },
+    "888359393_11629107": {
+        "master_ticket": 888359393,
+        "follower_ticket": 3924100431,
+        "follower_login": 11629107,
+        "symbol": "EURUSD",
+        "action": "SELL",
+        "volume": 0.03,
+        "status": "CLOSED",
+        "timestamp": "2025-12-30T13:29:23.512085",
+        "closed_at": "2025-12-30T14:13:49.155218"
+    },
+    "888359393_11671434": {
+        "master_ticket": 888359393,
+        "follower_ticket": 143257274,
+        "follower_login": 11671434,
+        "symbol": "EURUSD",
+        "action": "SELL",
+        "volume": 0.03,
+        "status": "CLOSED",
+        "timestamp": "2025-12-30T13:29:26.109491",
+        "closed_at": "2025-12-30T14:13:51.239197"
+    },
+    "888359393_7361813": {
+        "master_ticket": 888359393,
+        "follower_ticket": 888361147,
+        "follower_login": 7361813,
+        "symbol": "EURUSD",
+        "action": "SELL",
+        "volume": 0.03,
+        "status": "CLOSED",
+        "timestamp": "2025-12-30T13:29:28.581348",
+        "closed_at": "2025-12-30T14:13:53.670574"
+    },
+    "888363307_11596665": {
+        "master_ticket": 888363307,
+        "follower_ticket": 3924101481,
+        "follower_login": 11596665,
+        "symbol": "USDCHF",
+        "action": "SELL",
+        "volume": 0.03,
+        "status": "CLOSED",
+        "timestamp": "2025-12-30T13:33:49.288576",
+        "closed_at": "2025-12-30T14:13:47.151717"
+    },
+    "888363307_11629107": {
+        "master_ticket": 888363307,
+        "follower_ticket": 3924101485,
+        "follower_login": 11629107,
+        "symbol": "USDCHF",
+        "action": "SELL",
+        "volume": 0.03,
+        "status": "CLOSED",
+        "timestamp": "2025-12-30T13:33:51.444836",
+        "closed_at": "2025-12-30T14:13:49.169215"
+    },
+    "888363307_11671434": {
+        "master_ticket": 888363307,
+        "follower_ticket": 143258138,
+        "follower_login": 11671434,
+        "symbol": "USDCHF",
+        "action": "SELL",
+        "volume": 0.03,
+        "status": "CLOSED",
+        "timestamp": "2025-12-30T13:33:53.774889",
+        "closed_at": "2025-12-30T14:13:51.254719"
+    },
+    "888363307_7361813": {
+        "master_ticket": 888363307,
+        "follower_ticket": 888363368,
+        "follower_login": 7361813,
+        "symbol": "USDCHF",
+        "action": "SELL",
+        "volume": 0.03,
+        "status": "CLOSED",
+        "timestamp": "2025-12-30T13:33:55.849182",
+        "closed_at": "2025-12-30T14:13:53.683263"
+    },
+    "888378213_11596665": {
+        "master_ticket": 888378213,
+        "follower_ticket": 3924108953,
+        "follower_login": 11596665,
+        "symbol": "EURUSD",
+        "action": "SELL",
+        "volume": 0.05,
+        "status": "CLOSED",
+        "timestamp": "2025-12-30T14:00:30.508707",
+        "closed_at": "2025-12-30T14:13:47.165837"
+    },
+    "888378213_11629107": {
+        "master_ticket": 888378213,
+        "follower_ticket": 3924108965,
+        "follower_login": 11629107,
+        "symbol": "EURUSD",
+        "action": "SELL",
+        "volume": 0.05,
+        "status": "CLOSED",
+        "timestamp": "2025-12-30T14:00:32.865975",
+        "closed_at": "2025-12-30T14:13:49.182866"
+    },
+    "888378213_11671434": {
+        "master_ticket": 888378213,
+        "follower_ticket": 143264805,
+        "follower_login": 11671434,
+        "symbol": "EURUSD",
+        "action": "SELL",
+        "volume": 0.05,
+        "status": "CLOSED",
+        "timestamp": "2025-12-30T14:00:35.201746",
+        "closed_at": "2025-12-30T14:13:51.269717"
+    },
+    "888378213_7361813": {
+        "master_ticket": 888378213,
+        "follower_ticket": 888378322,
+        "follower_login": 7361813,
+        "symbol": "EURUSD",
+        "action": "SELL",
+        "volume": 0.05,
+        "status": "CLOSED",
+        "timestamp": "2025-12-30T14:00:37.556442",
+        "closed_at": "2025-12-30T14:13:53.696350"
+    },
+    "888378262_11596665": {
+        "master_ticket": 888378262,
+        "follower_ticket": 3924109013,
+        "follower_login": 11596665,
+        "symbol": "GBPUSD",
+        "action": "SELL",
+        "volume": 0.05,
+        "status": "CLOSED",
+        "timestamp": "2025-12-30T14:00:40.183718",
+        "closed_at": "2025-12-30T14:16:14.916480"
+    },
+    "888378262_11629107": {
+        "master_ticket": 888378262,
+        "follower_ticket": 3924109022,
+        "follower_login": 11629107,
+        "symbol": "GBPUSD",
+        "action": "SELL",
+        "volume": 0.05,
+        "status": "CLOSED",
+        "timestamp": "2025-12-30T14:00:42.797307",
+        "closed_at": "2025-12-30T14:16:16.953770"
+    },
+    "888378262_11671434": {
+        "master_ticket": 888378262,
+        "follower_ticket": 143264836,
+        "follower_login": 11671434,
+        "symbol": "GBPUSD",
+        "action": "SELL",
+        "volume": 0.05,
+        "status": "CLOSED",
+        "timestamp": "2025-12-30T14:00:45.523230",
+        "closed_at": "2025-12-30T14:16:18.420205"
+    },
+    "888378262_7361813": {
+        "master_ticket": 888378262,
+        "follower_ticket": 888378447,
+        "follower_login": 7361813,
+        "symbol": "GBPUSD",
+        "action": "SELL",
+        "volume": 0.05,
+        "status": "CLOSED",
+        "timestamp": "2025-12-30T14:00:49.008721",
+        "closed_at": "2025-12-30T14:16:20.108703"
+    },
+    "888381739_11596665": {
+        "master_ticket": 888381739,
+        "follower_ticket": 3924110784,
+        "follower_login": 11596665,
+        "symbol": "EURUSD",
+        "action": "SELL",
+        "volume": 0.05,
+        "status": "CLOSED",
+        "timestamp": "2025-12-30T14:07:25.554592",
+        "closed_at": "2025-12-30T14:16:02.838573"
+    },
+    "888381739_11629107": {
+        "master_ticket": 888381739,
+        "follower_ticket": 3924110801,
+        "follower_login": 11629107,
+        "symbol": "EURUSD",
+        "action": "SELL",
+        "volume": 0.05,
+        "status": "CLOSED",
+        "timestamp": "2025-12-30T14:07:27.484713",
+        "closed_at": "2025-12-30T14:16:04.859284"
+    },
+    "888381739_11671434": {
+        "master_ticket": 888381739,
+        "follower_ticket": 143266552,
+        "follower_login": 11671434,
+        "symbol": "EURUSD",
+        "action": "SELL",
+        "volume": 0.05,
+        "status": "CLOSED",
+        "timestamp": "2025-12-30T14:07:29.823444",
+        "closed_at": "2025-12-30T14:16:06.755399"
+    },
+    "888381739_7361813": {
+        "master_ticket": 888381739,
+        "follower_ticket": 888381824,
+        "follower_login": 7361813,
+        "symbol": "EURUSD",
+        "action": "SELL",
+        "volume": 0.05,
+        "status": "CLOSED",
+        "timestamp": "2025-12-30T14:07:31.716321",
+        "closed_at": "2025-12-30T14:16:08.330601"
+    },
+    "888381786_11596665": {
+        "master_ticket": 888381786,
+        "follower_ticket": 3924110818,
+        "follower_login": 11596665,
+        "symbol": "GBPUSD",
+        "action": "SELL",
+        "volume": 0.05,
+        "status": "CLOSED",
+        "timestamp": "2025-12-30T14:07:33.926452",
+        "closed_at": "2025-12-30T14:14:24.600654"
+    },
+    "888381786_11629107": {
+        "master_ticket": 888381786,
+        "follower_ticket": 3924110825,
+        "follower_login": 11629107,
+        "symbol": "GBPUSD",
+        "action": "SELL",
+        "volume": 0.05,
+        "status": "CLOSED",
+        "timestamp": "2025-12-30T14:07:36.671659",
+        "closed_at": "2025-12-30T14:14:27.137831"
+    },
+    "888381786_11671434": {
+        "master_ticket": 888381786,
+        "follower_ticket": 143266588,
+        "follower_login": 11671434,
+        "symbol": "GBPUSD",
+        "action": "SELL",
+        "volume": 0.05,
+        "status": "CLOSED",
+        "timestamp": "2025-12-30T14:07:39.062099",
+        "closed_at": "2025-12-30T14:14:29.148848"
+    },
+    "888381786_7361813": {
+        "master_ticket": 888381786,
+        "follower_ticket": 888381868,
+        "follower_login": 7361813,
+        "symbol": "GBPUSD",
+        "action": "SELL",
+        "volume": 0.05,
+        "status": "CLOSED",
+        "timestamp": "2025-12-30T14:07:41.610243",
+        "closed_at": "2025-12-30T14:14:31.240625"
+    },
+    "888383025_11596665": {
+        "master_ticket": 888383025,
+        "follower_ticket": 3924111521,
+        "follower_login": 11596665,
+        "symbol": "USDJPY",
+        "action": "SELL",
+        "volume": 0.03,
+        "status": "OPEN",
+        "timestamp": "2025-12-30T14:10:14.695492"
+    },
+    "888383025_11629107": {
+        "master_ticket": 888383025,
+        "follower_ticket": 3924111533,
+        "follower_login": 11629107,
+        "symbol": "USDJPY",
+        "action": "SELL",
+        "volume": 0.03,
+        "status": "CLOSED",
+        "timestamp": "2025-12-30T14:10:16.730387",
+        "closed_at": "2026-01-02T09:22:04.218605"
+    },
+    "888383025_11671434": {
+        "master_ticket": 888383025,
+        "follower_ticket": 143267269,
+        "follower_login": 11671434,
+        "symbol": "USDJPY",
+        "action": "SELL",
+        "volume": 0.03,
+        "status": "CLOSED",
+        "timestamp": "2025-12-30T14:10:19.601011",
+        "closed_at": "2026-01-02T09:22:06.993020"
+    },
+    "888383025_7361813": {
+        "master_ticket": 888383025,
+        "follower_ticket": 888384484,
+        "follower_login": 7361813,
+        "symbol": "USDJPY",
+        "action": "SELL",
+        "volume": 0.03,
+        "status": "CLOSED",
+        "timestamp": "2025-12-30T14:13:53.570974",
+        "closed_at": "2026-01-02T09:22:11.496388"
+    },
+    "888384523_11596665": {
+        "master_ticket": 888384523,
+        "follower_ticket": 3924112358,
+        "follower_login": 11596665,
+        "symbol": "USDJPY",
+        "action": "SELL",
+        "volume": 0.03,
+        "status": "CLOSED",
+        "timestamp": "2025-12-30T14:14:03.616299",
+        "closed_at": "2025-12-30T14:16:22.584054"
+    },
+    "888384523_11629107": {
+        "master_ticket": 888384523,
+        "follower_ticket": 3924112359,
+        "follower_login": 11629107,
+        "symbol": "USDJPY",
+        "action": "SELL",
+        "volume": 0.03,
+        "status": "CLOSED",
+        "timestamp": "2025-12-30T14:14:05.718731",
+        "closed_at": "2025-12-30T14:16:24.794890"
+    },
+    "888384523_11671434": {
+        "master_ticket": 888384523,
+        "follower_ticket": 143268001,
+        "follower_login": 11671434,
+        "symbol": "USDJPY",
+        "action": "SELL",
+        "volume": 0.03,
+        "status": "CLOSED",
+        "timestamp": "2025-12-30T14:14:07.718701",
+        "closed_at": "2025-12-30T14:16:27.218011"
+    },
+    "888384523_7361813": {
+        "master_ticket": 888384523,
+        "follower_ticket": 888384582,
+        "follower_login": 7361813,
+        "symbol": "USDJPY",
+        "action": "SELL",
+        "volume": 0.03,
+        "status": "CLOSED",
+        "timestamp": "2025-12-30T14:14:09.888466",
+        "closed_at": "2025-12-30T14:16:29.542068"
+    },
+    "888384660_11596665": {
+        "master_ticket": 888384660,
+        "follower_ticket": 3924112459,
+        "follower_login": 11596665,
+        "symbol": "GBPUSD",
+        "action": "SELL",
+        "volume": 0.05,
+        "status": "CLOSED",
+        "timestamp": "2025-12-30T14:14:24.584668",
+        "closed_at": "2025-12-30T14:16:22.761539"
+    },
+    "888384660_11629107": {
+        "master_ticket": 888384660,
+        "follower_ticket": 3924112468,
+        "follower_login": 11629107,
+        "symbol": "GBPUSD",
+        "action": "SELL",
+        "volume": 0.05,
+        "status": "CLOSED",
+        "timestamp": "2025-12-30T14:14:27.119835",
+        "closed_at": "2025-12-30T14:16:25.001042"
+    },
+    "888384660_11671434": {
+        "master_ticket": 888384660,
+        "follower_ticket": 143268083,
+        "follower_login": 11671434,
+        "symbol": "GBPUSD",
+        "action": "SELL",
+        "volume": 0.05,
+        "status": "CLOSED",
+        "timestamp": "2025-12-30T14:14:29.130232",
+        "closed_at": "2025-12-30T14:16:27.526033"
+    },
+    "888384660_7361813": {
+        "master_ticket": 888384660,
+        "follower_ticket": 888384768,
+        "follower_login": 7361813,
+        "symbol": "GBPUSD",
+        "action": "SELL",
+        "volume": 0.05,
+        "status": "CLOSED",
+        "timestamp": "2025-12-30T14:14:31.225622",
+        "closed_at": "2025-12-30T14:16:29.758305"
+    },
+    "888385603_11596665": {
+        "master_ticket": 888385603,
+        "follower_ticket": 3924112945,
+        "follower_login": 11596665,
+        "symbol": "GBPUSD",
+        "action": "SELL",
+        "volume": 0.05,
+        "status": "OPEN",
+        "timestamp": "2025-12-30T14:16:42.321871"
+    },
+    "888385603_11629107": {
+        "master_ticket": 888385603,
+        "follower_ticket": 3924112949,
+        "follower_login": 11629107,
+        "symbol": "GBPUSD",
+        "action": "SELL",
+        "volume": 0.05,
+        "status": "CLOSED",
+        "timestamp": "2025-12-30T14:16:44.275687",
+        "closed_at": "2026-01-02T09:22:04.233670"
+    },
+    "888385603_11671434": {
+        "master_ticket": 888385603,
+        "follower_ticket": 143268602,
+        "follower_login": 11671434,
+        "symbol": "GBPUSD",
+        "action": "SELL",
+        "volume": 0.05,
+        "status": "CLOSED",
+        "timestamp": "2025-12-30T14:16:46.320378",
+        "closed_at": "2026-01-02T09:22:07.004254"
+    },
+    "888385603_7361813": {
+        "master_ticket": 888385603,
+        "follower_ticket": 888385650,
+        "follower_login": 7361813,
+        "symbol": "GBPUSD",
+        "action": "SELL",
+        "volume": 0.05,
+        "status": "CLOSED",
+        "timestamp": "2025-12-30T14:16:48.395831",
+        "closed_at": "2026-01-02T09:22:11.509818"
+    },
+    "889597363_11629107": {
+        "master_ticket": 889597363,
+        "follower_ticket": 3924673685,
+        "follower_login": 11629107,
+        "symbol": "EURUSD",
+        "action": "SELL",
+        "volume": 0.01,
+        "status": "CLOSED",
+        "timestamp": "2026-01-02T09:26:02.322754",
+        "closed_at": "2026-01-02T09:28:49.159612"
+    },
+    "889598615_11629107": {
+        "master_ticket": 889598615,
+        "follower_ticket": 3924674582,
+        "follower_login": 11629107,
+        "symbol": "EURUSD",
+        "action": "SELL",
+        "volume": 0.01,
+        "status": "CLOSED",
+        "timestamp": "2026-01-02T09:29:04.504479",
+        "closed_at": "2026-01-02T09:29:22.992910"
+    },
+    "889598621_11629107": {
+        "master_ticket": 889598621,
+        "follower_ticket": 3924674585,
+        "follower_login": 11629107,
+        "symbol": "EURUSD",
+        "action": "SELL",
+        "volume": 0.01,
+        "status": "CLOSED",
+        "timestamp": "2026-01-02T09:29:04.970685",
+        "closed_at": "2026-01-02T09:29:23.290901"
+    },
+    "889598624_11629107": {
+        "master_ticket": 889598624,
+        "follower_ticket": 3924674592,
+        "follower_login": 11629107,
+        "symbol": "EURUSD",
+        "action": "SELL",
+        "volume": 0.01,
+        "status": "CLOSED",
+        "timestamp": "2026-01-02T09:29:06.811766",
+        "closed_at": "2026-01-02T09:29:11.543259"
+    },
+    "889601926_11629107": {
+        "master_ticket": 889601926,
+        "follower_ticket": 3924677478,
+        "follower_login": 11629107,
+        "symbol": "EURUSD",
+        "action": "SELL",
+        "volume": 0.01,
+        "status": "CLOSED",
+        "timestamp": "2026-01-02T09:38:34.774023",
+        "closed_at": "2026-01-02T09:41:18.814807"
+    },
+    "889602148_11629107": {
+        "master_ticket": 889602148,
+        "follower_ticket": 3924677737,
+        "follower_login": 11629107,
+        "symbol": "EURUSD",
+        "action": "SELL",
+        "volume": 0.01,
+        "status": "CLOSED",
+        "timestamp": "2026-01-02T09:39:15.233676",
+        "closed_at": "2026-01-02T09:41:19.122653"
+    },
+    "889604799_11629107": {
+        "master_ticket": 889604799,
+        "follower_ticket": 3924679261,
+        "follower_login": 11629107,
+        "symbol": "EURUSD",
+        "action": "SELL",
+        "volume": 0.01,
+        "status": "CLOSED",
+        "timestamp": "2026-01-02T09:41:08.183495",
+        "closed_at": "2026-01-02T09:41:14.064614"
+    },
+    "889675143_11629107": {
+        "master_ticket": 889675143,
+        "follower_ticket": 3924727798,
+        "follower_login": 11629107,
+        "symbol": "EURUSD",
+        "action": "SELL",
+        "volume": 0.01,
+        "status": "CLOSED",
+        "timestamp": "2026-01-02T10:59:03.184236",
+        "closed_at": "2026-01-02T11:00:03.317742"
+    },
+    "889675241_11629107": {
+        "master_ticket": 889675241,
+        "follower_ticket": 3924727876,
+        "follower_login": 11629107,
+        "symbol": "EURUSD",
+        "action": "SELL",
+        "volume": 0.01,
+        "status": "CLOSED",
+        "timestamp": "2026-01-02T10:59:11.293246",
+        "closed_at": "2026-01-02T10:59:54.070077"
+    }
+}

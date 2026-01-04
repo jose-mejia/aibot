@@ -1,0 +1,30 @@
+{
+    "BTCUSD": {
+        "max_slippage_points": 2000,
+        "max_spread_points": 5000
+    },
+    "XAUUSD": {
+        "max_slippage_points": 500,
+        "max_spread_points": 500
+    },
+    "EURUSD": {
+        "max_slippage_points": 50,
+        "max_spread_points": 50
+    },
+    "GBPUSD": {
+        "max_slippage_points": 50,
+        "max_spread_points": 50
+    },
+    "AUDUSD": {
+        "max_slippage_points": 50,
+        "max_spread_points": 50
+    },
+    "USDCHF": {
+        "max_slippage_points": 50,
+        "max_spread_points": 50
+    },
+    "USDJPY": {
+        "max_slippage_points": 50,
+        "max_spread_points": 50
+    }
+}
