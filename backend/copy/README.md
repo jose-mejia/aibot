@@ -1,422 +1,139 @@
-# 📦 AIBOT Trade Copier - Resumo do Sistema
+# 🚀 Zulfinance CopyTrading System
 
-## 🎯 O que foi criado
+Sistema profissional de copy trading para MetaTrader 5 com arquitetura cliente-servidor.
 
-Sistema completo de Trade Copier com arquitetura cliente-servidor para copiar ordens entre contas MT5.
-
----
-
-## 📁 Arquivos Criados
-
-### 🔧 Scripts de Build e Teste
-
-| Arquivo | Descrição |
-|---------|-----------|
-| `build_test_exe.bat` | **Script principal de build** - Compila API Server (Rust), Master Sender e Client Copier (Python) em executáveis |
-| `quick_test.bat` | **Teste rápido** - Inicia todos os componentes automaticamente em janelas separadas |
-| `clean_build.bat` | **Limpeza** - Remove todos os artefatos de build para rebuild limpo |
-
-### 📚 Documentação
-
-| Arquivo | Descrição |
-|---------|-----------|
-| `QUICKSTART.md` | **Guia de início rápido** - 3 passos para começar a usar |
-| `TESTING_GUIDE.md` | **Guia de testes** - Instruções detalhadas de configuração e teste |
-| `ARCHITECTURE.md` | **Diagrama de arquitetura** - Fluxo de dados, endpoints, configurações |
-| `TEST_CHECKLIST.md` | **Checklist de testes** - 24 testes para validação completa |
-| `README.md` (este arquivo) | **Resumo geral** - Visão geral do sistema |
+**Versão:** 1.0  
+**Status:** ✅ Estável e Pronto para Testes
 
 ---
 
-## 🏗️ Arquitetura do Sistema
+## 📚 Documentação
 
-```
-┌─────────────┐         ┌─────────────┐         ┌─────────────┐
-│  MT5 MASTER │ ──────▶ │ API SERVER  │ ──────▶ │ MT5 CLIENT  │
-│             │         │   (Rust)    │         │             │
-└─────────────┘         │  Port 8000  │         └─────────────┘
-       │                └─────────────┘                │
-       │                       │                       │
-       ▼                       │                       ▼
-┌─────────────┐                │                ┌─────────────┐
-│   MASTER    │                │                │   CLIENT    │
-│   SENDER    │────HTTP POST───┤                │   COPIER    │
-│  (Python)   │                │                │  (Python)   │
-└─────────────┘                └───WebSocket────└─────────────┘
-```
+**Toda a documentação técnica está organizada em:**
 
-### Componentes
+### 👉 **[`docs/`](docs/README.md)** ← CLIQUE AQUI
 
-1. **API Server (Rust/Axum)**
-   - Servidor HTTP/WebSocket na porta 8000
-   - Gerencia autenticação JWT
-   - Broadcast de sinais para clientes
-   - Banco de dados SQLite
-
-2. **Master Sender (Python)**
-   - Monitora conta MT5 Master
-   - Detecta novas ordens, modificações e fechamentos
-   - Envia sinais para API via HTTP POST
-
-3. **Client Copier (Python)**
-   - Conecta via WebSocket ao API Server
-   - Recebe sinais em tempo real
-   - Copia ordens na conta MT5 Client
-   - Aplica safety rules
+Documentos principais:
+- **[Auditoria de Fluxo de Ordens](docs/AUDIT_ORDER_FLOW.md)** - Checklist completo de testes
+- **[Detecção de Ordens](docs/ORDER_DETECTION.md)** - Como funciona (manual e bot)
+- **[Segurança do Banco de Dados](docs/DATABASE_SECURITY.md)** - Política de segurança
+- **[Release v1.0](docs/RELEASE_v1.0.md)** - O que foi implementado
 
 ---
 
-## 🚀 Como Usar
+## 🏗️ Arquitetura
 
-### Passo 1: Build
-```bash
-# Compilar todos os executáveis
-build_test_exe.bat
+```
+Master Trader (MT5) → Master Sender (Python) → API Server (Rust) → Client Copier (Python) → Client MT5
 ```
 
-Isso cria a pasta `dist_test/` com:
-- `api_server.exe` (ou use `cargo run` em api_server/)
-- `master_sender.exe`
-- `client_copier.exe`
-- `config_sender.json`
-- `config_client.json`
+### Componentes:
+- **Master Sender** - Detecta ordens no MT5 Master (manual ou bot)
+- **API Server** - Backend Rust com segurança multi-camada
+- **Client Copier** - Replica ordens no MT5 Client com SafetyGuard
+- **Database** - SQLite único e oficial (`api_server/aibot.db`)
 
-### Passo 2: Configurar
+---
 
-Edite `dist_test/config_sender.json`:
-```json
-{
-  "mt5": {
-    "login": 12345678,
-    "password": "sua_senha_master",
-    "server": "seu_servidor"
-  }
-}
-```
+## ⚡ Quick Start
 
-Edite `dist_test/config_client.json`:
-```json
-{
-  "mt5": {
-    "login": 87654321,
-    "password": "sua_senha_client",
-    "server": "seu_servidor"
-  },
-  "trade_copy": {
-    "mode": "fix",
-    "fixed_lot": 0.01
-  }
-}
-```
-
-### Passo 3: Testar
-
-```bash
-# Inicia todos os componentes automaticamente
-quick_test.bat
-```
-
-Ou manualmente:
-```bash
-# Terminal 1: API Server
+### 1. Iniciar API Server
+```powershell
 cd api_server
-cargo run --release
-
-# Terminal 2: Master Sender
-cd dist_test
-master_sender.exe
-
-# Terminal 3: Client Copier
-cd dist_test
-client_copier.exe
+cargo run
 ```
 
-### Passo 4: Validar
+### 2. Iniciar Master Sender
+```powershell
+cd master_sender/gui
+npm run tauri dev
+```
 
-1. Abra uma ordem no MT5 Master
-2. Verifique os logs:
-   - `sender.log` - deve mostrar ordem detectada e enviada
-   - `client.log` - deve mostrar ordem recebida e copiada
-3. Confirme que a ordem aparece no MT5 Client
+### 3. Iniciar Client Copier
+```powershell
+cd client_copier/gui
+npm run tauri dev
+```
+
+### 4. Configurar Perfis
+- Preencher **MT5 ID** e **MT5 Path** em ambos os apps
+- Salvar configurações
+
+### 5. Testar
+- Abrir ordem manual no MT5 Master
+- Verificar cópia no MT5 Client
+
+**Documentação completa:** [`docs/AUDIT_ORDER_FLOW.md`](docs/AUDIT_ORDER_FLOW.md)
 
 ---
 
-## ⚙️ Configurações Principais
+## ✅ Features Implementadas
 
-### Modo de Cópia
-
-**Volume Fixo:**
-```json
-"trade_copy": {
-  "mode": "fix",
-  "fixed_lot": 0.01
-}
-```
-
-**Volume Proporcional:**
-```json
-"trade_copy": {
-  "mode": "multiplier",
-  "multiplier": 0.5  // 50% do volume do Master
-}
-```
-
-### Safety Rules
-
-```json
-"trade_copy": {
-  "max_slippage_points": 50,
-  "max_spread_points": 20,
-  "max_exposure_trades": 5,
-  "max_exposure_lots": 10.0
-},
-"safety": {
-  "max_drawdown_percent": 10
-}
-```
-
----
-
-## 📊 Endpoints da API
-
-| Método | Endpoint | Descrição | Auth |
-|--------|----------|-----------|------|
-| POST | `/token` | Login (retorna JWT) | ❌ |
-| POST | `/users/public` | Criar usuário | ❌ |
-| POST | `/signal/broadcast` | Enviar sinal | ✅ |
-| POST | `/signal/close` | Fechar sinal | ✅ |
-| GET | `/ws` | WebSocket | ✅ |
-| GET | `/health` | Health check | ❌ |
-
----
-
-## 🔍 Monitoramento
-
-### Logs
-
-- **sender.log** - Master Sender
-  - Ordens detectadas
-  - Sinais enviados
-  - Erros de conexão
-
-- **client.log** - Client Copier
-  - Sinais recebidos
-  - Ordens copiadas
-  - Safety rules aplicadas
-
-### Verificação de Saúde
-
-```bash
-# Verificar se API está rodando
-curl http://localhost:8000/health
-# Deve retornar: OK
-```
-
----
-
-## 🐛 Troubleshooting
-
-### Problema: Executáveis não foram criados
-**Solução:**
-```bash
-clean_build.bat
-build_test_exe.bat
-```
-
-### Problema: "Failed to connect to MT5"
-**Soluções:**
-- Certifique-se que MT5 está aberto e logado
-- Verifique credenciais em config
-- Reinicie o MT5
-
-### Problema: "Connection refused to API"
-**Soluções:**
-- Verifique se API Server está rodando
-- Verifique se porta 8000 está livre: `netstat -ano | findstr :8000`
-- Reinicie o API Server
-
-### Problema: Ordem não foi copiada
-**Soluções:**
-- Verifique client.log para detalhes
-- Verifique safety rules (spread, slippage)
-- Verifique margem disponível
-- Verifique se símbolo está disponível
-
----
-
-## 📈 Fluxo de Dados
-
-```
-1. Ordem aberta no MT5 Master
-   ↓
-2. Master Sender detecta
-   ↓
-3. POST /signal/broadcast → API Server
-   ↓
-4. API Server salva no DB
-   ↓
-5. Broadcast via WebSocket
-   ↓
-6. Client Copier recebe
-   ↓
-7. Aplica safety rules
-   ↓
-8. Copia ordem no MT5 Client
-```
+- ✅ Detecção automática de ordens (manual e bot)
+- ✅ Copy trading em tempo real via WebSocket
+- ✅ Segurança multi-camada (JWT + HMAC + Role-based)
+- ✅ SafetyGuard (limites, margem, SL)
+- ✅ Configuração dinâmica de MT5 Path
+- ✅ Banco de dados único e protegido
+- ✅ Logs detalhados para debug
+- ✅ Arredondamento de preços (evita "Invalid Price")
 
 ---
 
 ## 🔐 Segurança
 
-### Autenticação
-- JWT tokens para autenticação
-- Credenciais em arquivos de configuração (não commitar!)
+O sistema implementa **4 camadas de segurança**:
+1. **JWT Authentication** - Autenticação de usuários
+2. **Role-Based Access** - Apenas MASTER pode broadcast
+3. **HMAC-SHA256 Signature** - Integridade de dados
+4. **Timestamp Validation** - Anti-replay attacks
 
-### Proteção dos Executáveis
-- PyInstaller com `--onefile`
-- Opção `--key` para ofuscação básica
-- Para produção: considere PyArmor
-
-### Safety Rules
-- Max spread, slippage, exposure
-- Max drawdown protection
-- Validações de margem e símbolo
+**Leia:** [`docs/DATABASE_SECURITY.md`](docs/DATABASE_SECURITY.md)
 
 ---
 
-## 📦 Estrutura de Pastas
+## 🧪 Testes
 
-```
-aibot/backend/copy/
-│
-├── api_server/                  # Servidor Rust
-│   ├── src/
-│   │   ├── main.rs
-│   │   ├── handlers/
-│   │   ├── models/
-│   │   ├── db/
-│   │   └── auth/
-│   └── Cargo.toml
-│
-├── master_sender/               # Master Sender
-│   ├── main_sender.py
-│   ├── sender_service.py
-│   ├── mt5_connector.py
-│   └── config_sender.json
-│
-├── client_copier/               # Client Copier
-│   ├── main_client.py
-│   ├── client_service.py
-│   ├── mt5_connector.py
-│   ├── safety.py
-│   └── config_client.json
-│
-├── dist_test/                   # Executáveis (gerado)
-│   ├── master_sender.exe
-│   ├── client_copier.exe
-│   ├── config_sender.json
-│   └── config_client.json
-│
-├── build_test_exe.bat          # Build script
-├── quick_test.bat              # Test script
-├── clean_build.bat             # Clean script
-│
-└── Documentação/
-    ├── QUICKSTART.md
-    ├── TESTING_GUIDE.md
-    ├── ARCHITECTURE.md
-    ├── TEST_CHECKLIST.md
-    └── README.md (este arquivo)
-```
+**Checklist completo de testes:** [`docs/AUDIT_ORDER_FLOW.md`](docs/AUDIT_ORDER_FLOW.md)
+
+Testes incluem:
+- ✅ Ordem de compra (BUY Market)
+- ✅ Ordem pendente (BUY LIMIT)
+- ✅ Modificação de SL/TP
+- ✅ Fechamento de ordem
+- ✅ Múltiplas ordens simultâneas
+- ✅ Reconexão após queda
+- ✅ Testes de segurança
 
 ---
 
-## 🎯 Próximos Passos
+## 📞 Suporte
 
-### Fase 1: Validação ✅
-- [x] Compilar executáveis
-- [x] Configurar contas MT5
-- [x] Testar cópia básica
-- [x] Validar safety rules
+**Problemas comuns?** Consulte [`docs/README.md`](docs/README.md) - Seção "Suporte e Troubleshooting"
 
-### Fase 2: Testes Avançados
-- [ ] Teste com múltiplos clientes
-- [ ] Teste de reconexão
-- [ ] Teste de stress (múltiplas ordens)
-- [ ] Teste de latência
-
-### Fase 3: Produção
-- [ ] Build com GUI (Tauri)
-- [ ] Deploy em VPS
-- [ ] Monitoramento contínuo
-- [ ] Backup e recovery
+**Dúvidas sobre código?** Consulte [`docs/AUDIT_ORDER_FLOW.md`](docs/AUDIT_ORDER_FLOW.md)
 
 ---
 
-## 📞 Recursos
+## 🤝 Contribuindo
 
-| Recurso | Localização |
-|---------|-------------|
-| Início Rápido | `QUICKSTART.md` |
-| Guia de Testes | `TESTING_GUIDE.md` |
-| Arquitetura | `ARCHITECTURE.md` |
-| Checklist | `TEST_CHECKLIST.md` |
-| Logs | `dist_test/*.log` |
+1. Leia [`docs/GITHUB_GUIDE.md`](docs/GITHUB_GUIDE.md)
+2. Consulte [`docs/RESPONSIBILITY_AREAS.md`](docs/RESPONSIBILITY_AREAS.md)
+3. Siga padrões de segurança em [`docs/DATABASE_SECURITY.md`](docs/DATABASE_SECURITY.md)
 
 ---
 
-## ⚡ Comandos Rápidos
+## 📊 Status do Projeto
 
-```bash
-# Build completo
-build_test_exe.bat
-
-# Teste rápido
-quick_test.bat
-
-# Rebuild limpo
-clean_build.bat
-build_test_exe.bat
-
-# Verificar saúde da API
-curl http://localhost:8000/health
-
-# Ver logs em tempo real (PowerShell)
-Get-Content dist_test\sender.log -Wait -Tail 20
-Get-Content dist_test\client.log -Wait -Tail 20
-```
+| Componente | Status | Versão |
+|------------|--------|--------|
+| API Server | ✅ Estável | 1.0 |
+| Master Sender | ✅ Estável | 1.0 |
+| Client Copier | ✅ Estável | 1.0 |
+| Documentação | ✅ Completa | 1.0 |
+| Testes | ⏳ Em andamento | - |
 
 ---
 
-## 💡 Dicas Importantes
-
-1. **Sempre teste em conta demo primeiro**
-2. **Verifique os logs antes de reportar problemas**
-3. **Mantenha backups das configurações**
-4. **Use safety rules apropriadas para seu risco**
-5. **Monitore a latência regularmente**
-6. **Nunca commite arquivos com senhas reais**
-
----
-
-## ✅ Status do Projeto
-
-- ✅ API Server (Rust) - Funcional
-- ✅ Master Sender (Python) - Funcional
-- ✅ Client Copier (Python) - Funcional
-- ✅ Build Scripts - Completo
-- ✅ Documentação - Completa
-- ✅ Testes Básicos - Validados
-- ⏳ Testes Avançados - Pendente
-- ⏳ GUI (Tauri) - Pendente
-- ⏳ Deploy Produção - Pendente
-
----
-
-**Versão:** 1.0.0  
-**Data:** 2026-01-01  
-**Status:** ✅ Pronto para Testes
-
----
-
-**Boa sorte com seu Trade Copier! 🚀📈**
+**Desenvolvido por:** Equipe Zulfinance  
+**Última Atualização:** 2026-01-04
