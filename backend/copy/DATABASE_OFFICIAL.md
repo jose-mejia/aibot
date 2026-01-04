@@ -12,6 +12,39 @@ api_server/aibot.db
 
 ---
 
+## 🏗️ Arquitetura de Acesso
+
+### ✅ REGRA DE OURO: Apenas a API acessa o banco
+
+```
+Desktop Apps (Master/Client)
+         │
+         │ HTTP/WebSocket (API Calls)
+         │
+         ▼
+    API Server (Rust) ◄──── ÚNICA CONEXÃO DIRETA
+         │
+         │ SQLite
+         ▼
+    aibot.db
+```
+
+**NUNCA:**
+- ❌ Desktop apps NÃO acessam o banco diretamente
+- ❌ Python services NÃO acessam o banco diretamente
+- ❌ Frontend NÃO acessa o banco diretamente
+
+**SEMPRE:**
+- ✅ Toda operação de dados passa pela API REST
+- ✅ API é a única camada com acesso ao SQLite
+- ✅ Segurança, validação e lógica de negócio na API
+
+### 🛠️ Exceção: Scripts Administrativos
+
+Scripts Python (`debug_db.py`, `reset_passwords.py`, etc.) são **ferramentas de manutenção** para uso administrativo local, NÃO fazem parte da aplicação em produção.
+
+---
+
 ## 📍 Localização
 
 - **Caminho Absoluto:** `C:\Users\josemejia\dev\python\aibot\backend\copy\api_server\aibot.db`

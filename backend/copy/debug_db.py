@@ -1,7 +1,8 @@
 import sqlite3
 import os
+from db_config import OFFICIAL_DB_PATH
 
-DB_PATH = os.path.join("api_server", "aibot.db")
+DB_PATH = OFFICIAL_DB_PATH
 
 def check_users():
     if not os.path.exists(DB_PATH):
