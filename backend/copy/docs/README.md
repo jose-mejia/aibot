@@ -1,109 +1,48 @@
-# 📚 Documentação Técnica - Zulfinance CopyTrading
+# 📚 Zulfinance CopyTrading - Documentação Oficial
 
-**Versão:** 1.0  
-**Última Atualização:** 2026-01-04
-
----
-
-## 📂 Estrutura de Documentação
-
-```
-docs/
-├── flows/          → Fluxos de operação (OPEN, MODIFY, CLOSE)
-├── features/       → Features individuais (SafetyGuard, MT5 Path, etc)
-├── architecture/   → Arquitetura do sistema
-├── security/       → Documentação de segurança
-├── testing/        → Guias e checklists de teste
-└── README.md       → Este arquivo
-```
+Bem-vindo à base de conhecimento do projeto. Esta documentação foi estruturada para guiar desde novos desenvolvedores até mantenedores experientes através da arquitetura, operação e manutenção do sistema.
 
 ---
 
-## 🔄 FLUXOS DE OPERAÇÃO
+## 🧭 Mapa de Navegação
 
-### Fluxos Principais
-- **[FLOW_OPEN_ORDER.md](flows/FLOW_OPEN_ORDER.md)** - Abertura de ordem (13 etapas detalhadas)
-- **[FLOW_MODIFY.md](flows/FLOW_MODIFY.md)** - Modificação de SL/TP
-- **[FLOW_CLOSE.md](flows/FLOW_CLOSE.md)** - Fechamento de ordem
+### 🚀 Para Começar (Onboarding)
+Se você acabou de chegar, comece por aqui:
 
-### Como Usar
-Cada fluxo contém:
-- ✅ Diagrama visual
-- ✅ Detalhamento por etapa
-- ✅ Código-fonte relevante
-- ✅ Métricas de performance
-- ✅ Possíveis erros e soluções
-- ✅ Checklist de teste
+- **[Visão Geral da Arquitetura](architecture/SYSTEM_OVERVIEW_V1.md)**: Entenda quem fala com quem (Master, API, Client).
+- **[Configuração de Ambiente](setup/ENVIRONMENT.md)**: Prepare sua máquina (Rust, Python, Node, MT5).
+- **[Interface & Sidecars](components/GUI_OVERVIEW.md)**: Entenda como o Frontend interage com o Python "escondido".
 
----
+### 🧠 Core do Sistema (Deep Dive)
+Documentação técnica profunda dos componentes:
 
-## 🎯 FEATURES
+- **[Esquema do Banco de Dados](database/SCHEMA_V1.md)**: Estrutura das tabelas `users` e `signals`.
+- **[API Endpoints](api/ENDPOINTS.md)**: contrato da API Rust (Rotas, Payloads, Auth).
+- **[Fluxos de Ordens](flows/FLOW_OPEN_ORDER.md)**: Diagramas detalhados de como uma ordem viaja do Master ao Client.
+  - [Fluxo de Abertura](flows/FLOW_OPEN_ORDER.md)
+  - [Fluxo de Modificação](flows/FLOW_MODIFY.md)
+  - [Fluxo de Fechamento](flows/FLOW_CLOSE.md)
+- **[Detecção de Ordens](ORDER_DETECTION.md)**: Como o Master "enxerga" as ordens no MT5.
 
-### Segurança
-- **[DATABASE_SECURITY.md](security/DATABASE_SECURITY.md)** - Política de segurança do banco
-- **[DATABASE_OFFICIAL.md](DATABASE_OFFICIAL.md)** - Banco de dados único oficial
+### 🛠️ Manutenção & Operação
+Guias para o dia-a-dia do desenvolvimento:
 
-### Funcionalidades
-- **[ORDER_DETECTION.md](ORDER_DETECTION.md)** - Detecção de ordens (manual e bot)
-- **[WORKFLOW_MT5_PATH.md](WORKFLOW_MT5_PATH.md)** - Configuração dinâmica de MT5 Path
+- **[Estado Atual & Contexto](devia/CURRENT_STATE.md)**: **(CRÍTICO)** Leia isso para saber o status atual do projeto (Hotfixes, versões).
+- **[Guia de Troubleshooting](troubleshooting/COMMON_ISSUES.md)**: Soluções para erros conhecidos (Conexão MT5, Preço Inválido, etc).
+- **[Checklist de QA](testing/QA_CHECKLIST.md)**: Roteiro para validar uma nova versão antes de liberar.
 
----
+### 📜 Histórico e Memória
+Registros de decisões e sessões passadas:
 
-## 🧪 TESTES
-
-### Guias de Teste
-- **[AUDIT_ORDER_FLOW.md](AUDIT_ORDER_FLOW.md)** - Auditoria completa + Checklist de 8 testes
-
-### Como Testar
-1. Leia o fluxo correspondente em `flows/`
-2. Execute o checklist em `AUDIT_ORDER_FLOW.md`
-3. Documente resultados
+- **[Logs de Sessão](devia/CHAT_TRANSCRIPT_2026_01_04.md)**: Transcripts de sessões de debug importantes.
+- **[Diários de Dev](devia/DEV_DIARY_LAST_3_DAYS.md)**: Resumos executivos do progresso recente.
 
 ---
 
-## 🏗️ ARQUITETURA
+## 🏷️ Glossário Rápido
 
-- **[ARCHITECTURE.md](ARCHITECTURE.md)** - Visão geral da arquitetura
-- **[DESIGN_SYSTEM.md](DESIGN_SYSTEM.md)** - Sistema de design
-
----
-
-## 📋 GESTÃO DE PROJETO
-
-- **[RELEASE_v1.0.md](RELEASE_v1.0.md)** - Notas de release
-- **[DELEGATION_PLAN.md](DELEGATION_PLAN.md)** - Plano de delegação
-- **[RESPONSIBILITY_AREAS.md](RESPONSIBILITY_AREAS.md)** - Áreas de responsabilidade
-
----
-
-## 🚀 QUICK START
-
-### Para Desenvolvedores
-1. Leia [FLOW_OPEN_ORDER.md](flows/FLOW_OPEN_ORDER.md)
-2. Leia [DATABASE_SECURITY.md](security/DATABASE_SECURITY.md)
-3. Execute testes em [AUDIT_ORDER_FLOW.md](AUDIT_ORDER_FLOW.md)
-
-### Para Testadores (QA)
-1. Leia [AUDIT_ORDER_FLOW.md](AUDIT_ORDER_FLOW.md)
-2. Execute checklists sequencialmente
-3. Documente resultados
-
-### Para Gestores
-1. Leia [RELEASE_v1.0.md](RELEASE_v1.0.md)
-2. Consulte [DELEGATION_PLAN.md](DELEGATION_PLAN.md)
-
----
-
-## 🆘 Troubleshooting
-
-| Problema | Documento |
-|----------|-----------|
-| Ordens não copiam | [FLOW_OPEN_ORDER.md](flows/FLOW_OPEN_ORDER.md) - Seção "Possíveis Erros" |
-| Erro 500 ao salvar | [CHECK_SERVER_VERSION.md](CHECK_SERVER_VERSION.md) |
-| Banco de dados | [DATABASE_OFFICIAL.md](DATABASE_OFFICIAL.md) |
-| Segurança | [DATABASE_SECURITY.md](security/DATABASE_SECURITY.md) |
-
----
-
-**Mantido por:** Equipe Zulfinance  
-**Contato:** Issues no GitHub
+- **Sidecar:** O processo Python executável que roda em background, controlado pelo Tauri.
+- **Master:** A conta "fonte" dos sinais. Só monitora, nunca executa.
+- **Client/Follower:** A conta "destino". Só executa, nunca gera sinais.
+- **Ticket:** ID único de uma ordem no MT5. O Client mantém um mapa `MasterTicket -> ClientTicket`.
+- **Broadcast:** O ato da API enviar um sinal recebido para todos os Clients conectados via WebSocket.
