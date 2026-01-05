@@ -302,5 +302,29 @@ Esta foi uma sessão de **debugging profundo** onde identifiquei e resolvi um pr
 ---
 
 **Timestamp Final:** 2026-01-05 11:06:00  
-**Status:** ✅ SESSÃO COMPLETA - PRONTO PARA PRODUÇÃO
+
+---
+
+## 🎉 Sessão Finalizada - 11:50 (Parte 3)
+
+### ✅ Correções Críticas de Execução
+
+**1. Invalid Price (Error 10015)**
+- **Causa:** Python acessava `price_open` para ordens pendentes, que é `0.0`.
+- **Correção:** Atualizado para `master_item.get('price') or master_item.get('price_open', 0.0)`.
+
+**2. Anti-Latência Estrita (3s)**
+- **Regra:** Se `(agora - time_msc) > 3000ms`, a ordem é rejeitada.
+- **Objetivo:** Impedir execução de ordens antigas do snapshot ou com atraso de rede excessivo.
+- **Log:** `LATENCY REJECT: Trade {ticket} is too old`
+
+**3. Limpeza de Banco na Inicialização**
+- **Ação:** `db.purge_all()` chamado no startup.
+- **Efeito:** Client sempre começa com estado limpo, ignorando histórico antigo e focando apenas em ordens vivas (recebidas via WebSocket).
+
+### ✅ Status Final
+- Client Copier rebuildado com sucesso (11:48).
+- Todas as validações implementadas.
+- Pronto para testes de nova interface de configuração.
+
 
