@@ -1,7 +1,7 @@
 # 🔒 ZulFinance Trade Copier - Security Architecture
 
-**Version:** 1.0  
-**Last Updated:** 2026-01-02  
+**Version:** 2.0  
+**Last Updated:** 2026-01-05  
 **Status:** MANDATORY - DO NOT MODIFY WITHOUT REVIEW
 
 ---
@@ -183,30 +183,47 @@ def _get_headers(self, payload=None):
     return headers
 ```
 
-**API Server Validation (Rust - TO IMPLEMENT):**
+**API Server Validation (Rust - ✅ IMPLEMENTED):**
+
+**Module:** `src/security.rs`
+
+**Implementation:**
 ```rust
-// 1. Extract timestamp and signature from headers
-let timestamp = req.headers().get("X-Timestamp")?;
-let signature = req.headers().get("X-Signature")?;
-
-// 2. Verify timestamp is recent (within 10 seconds)
-let now = SystemTime::now().duration_since(UNIX_EPOCH)?.as_millis();
-if (now - timestamp.parse::<u128>()?) > 10000 {
-    return Err(StatusCode::FORBIDDEN); // Replay attack
-}
-
-// 3. Reconstruct canonical string
-let body_str = serde_json::to_string(&body)?;
-let canonical = format!("{}.{}", timestamp, body_str);
-
-// 4. Compute expected signature
-let expected = hmac_sha256(&token, &canonical);
-
-// 5. Compare (constant-time to prevent timing attacks)
-if !constant_time_eq(signature, expected) {
-    return Err(StatusCode::FORBIDDEN); // Tampered data
+pub fn validate_signature(
+    headers: &HeaderMap,
+    body: &str,
+    token: &str,
+) -> Result<(), StatusCode> {
+    // 1. Extract timestamp and signature from headers
+    let timestamp = headers.get("X-Timestamp")...;
+    let signature = headers.get("X-Signature")...;
+    
+    // 2. Verify timestamp is recent (within 10 seconds)
+    let now = SystemTime::now().duration_since(UNIX_EPOCH)?.as_millis();
+    if now.saturating_sub(request_time) > 10_000 {
+        return Err(StatusCode::FORBIDDEN); // Replay attack
+    }
+    
+    // 3. Reconstruct canonical string
+    let canonical = format!("{}.{}", timestamp, body);
+    
+    // 4. Compute expected signature with HMAC-SHA256
+    let mut mac = HmacSha256::new_from_slice(token.as_bytes())?;
+    mac.update(canonical.as_bytes());
+    let expected = hex::encode(mac.finalize().into_bytes());
+    
+    // 5. Constant-time comparison (prevents timing attacks)
+    if !constant_time_eq(signature, &expected) {
+        return Err(StatusCode::FORBIDDEN); // Tampered data
+    }
+    
+    Ok(())
 }
 ```
+
+**Usage in V2 Endpoints:**
+- `POST /api/v2/actives` (broadcast_signal_v2)
+- All Master Sender signal broadcasts
 
 **🚨 SECURITY RULE 6:** All Master Sender signals MUST include X-Signature and X-Timestamp headers
 
@@ -375,12 +392,52 @@ If a security breach is suspected:
 
 ---
 
+## 🆕 V2 Security Enhancements (2026-01-05)
+
+### Centralized Audit Logging
+- **Implementation:** `src/handlers/mod.rs` (`log_audit`)
+- **Coverage:** Login, User Mgmt, Settings, MT5 Connections.
+- **Security:** Immutable record of all state-changing operations.
+
+### HTTP Security Headers
+- **X-Content-Type-Options:** nosniff
+- **X-Frame-Options:** DENY (Anti-Clickjacking)
+- **X-XSS-Protection:** 1; mode=block
+- **Content-Security-Policy (CSP):** Self-origin restriction with controlled script/style source.
+- **Referrer-Policy:** strict-origin-when-cross-origin.
+- **Strict-Transport-Security:** 2-year HSTS with preload support.
+
+---
+
+## 🌐 Web Dashboard Session Security
+
+### 1. Global Interceptor (api.ts)
+- Automatic token cleanup on 401/403 errors.
+- Prevents "Zombie Sessions" after role revocation or suspension.
+
+### 2. Activity-Linked Idle Timer
+- Timer resets on UI interaction AND successful API communication.
+- Balanced 15-minute expiration for high-security environments.
+
+---
+
+## 📋 Security Checklist (Updated Jan 2026)
+
+- [x] Audit Logging active for all critical handlers.
+- [x] Secure headers verified via `curl -I`.
+- [x] CSP implemented without `unsafe-eval`.
+- [x] 401 interceptor wipes `sessionStorage` on failure.
+
+---
+
 ## 📚 References
 
 - [OWASP Top 10](https://owasp.org/www-project-top-ten/)
 - [JWT Best Practices](https://tools.ietf.org/html/rfc8725)
 - [HMAC-SHA256 Specification](https://tools.ietf.org/html/rfc2104)
 - [WebSocket Security](https://datatracker.ietf.org/doc/html/rfc6455#section-10)
+- [SQLite WAL Mode](https://www.sqlite.org/wal.html)
+- [OWASP Secure Headers](https://owasp.org/www-project-secure-headers/)
 
 ---
 

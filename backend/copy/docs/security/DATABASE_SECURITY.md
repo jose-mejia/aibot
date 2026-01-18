@@ -71,6 +71,12 @@ api_server/aibot.db
 - **Protection:** Validated to ensure it references `aibot.db`
 - **Fallback:** Always defaults to official database if invalid
 
+### Layer 4: Centralized Audit Logging
+- **Module:** `src/handlers/mod.rs` (`log_audit`)
+- **Protection:** Write-only (via API) record of all security-sensitive events
+- **Storage:** `audit_logs` table
+- **Purpose:** Compliance, non-repudiation, and incident forensics
+
 ---
 
 ## 🚨 Attack Scenarios Prevented
@@ -122,10 +128,28 @@ ln -s /tmp/fake.db api_server/aibot.db
 
 ## 🔍 Audit Trail
 
-All database access attempts are logged:
-- ✅ Successful connections show: `"Using official database: ..."`
-- ⚠️ Invalid attempts show: `"WARNING: DATABASE_URL does not reference official database"`
-- 🚨 Security violations trigger: `panic!` or `SecurityError` exception
+All system-changing operations are logged to the `audit_logs` table:
+
+### Tracked Events
+- **USER_LOGIN:** Successful and failed login attempts (with IP if provided)
+- **CREATE_USER:** When an admin creates a new user
+- **UPDATE_SETTING:** Changes to global system configurations
+- **CREATE_MT5 / DELETE_MT5:** Management of MT5 terminal connections
+- **V2_CLOSE:** Atomic transitions between Active and History tables
+
+### Audit Log Schema
+| Field | Description |
+| :--- | :--- |
+| `timestamp` | UTC time of event |
+| `action` | Event type (e.g., USER_LOGIN) |
+| `username` | Subject or actor username |
+| `status` | SUCCESS or FAILURE |
+| `details` | Contextual info (e.g., "Invalid password") |
+
+### Compliance
+- ✅ Successful actions show: `"SUCCESS"`
+- ⚠️ Blocked/Invalid attempts show: `"FAILURE"`
+- 🚨 Security violations are strictly logged before any action is blocked.
 
 ---
 
@@ -155,6 +179,30 @@ If you suspect a security breach:
 
 ---
 
+## 🆕 V2 Enhancements (2026-01-05)
+
+### WAL Mode (Write-Ahead Logging)
+**Implementation:** `src/db/mod.rs`
+
+```rust
+sqlx::query("PRAGMA journal_mode = WAL; PRAGMA foreign_keys = ON; PRAGMA synchronous = NORMAL;")
+    .execute(&pool)
+    .await?;
+```
+
+**Security Benefits:**
+- **Crash Safety:** Database corruption prevented on power loss/crash
+- **Concurrency:** Better read/write performance under load
+- **Atomicity:** Enhanced transaction reliability for V2 Active/History split
+
+### Active/History Architecture
+See `docs/security/V2_ARCHITECTURE_SECURITY.md` for:
+- Zombie Order prevention
+- Atomic lifecycle transitions
+- Segregated data access patterns
+
+---
+
 ## 🔐 Compliance
 
 This security policy ensures:
@@ -162,7 +210,9 @@ This security policy ensures:
 - **Attack Prevention:** Multiple validation layers
 - **Audit Trail:** All access is logged
 - **Fail-Safe:** Invalid attempts are blocked, not ignored
+- **Crash Safety:** WAL mode protects against corruption
+- **Architectural Security:** V2 split prevents Zombie Orders
 
-**Last Updated:** 2026-01-04  
-**Policy Version:** 1.0  
+**Last Updated:** 2026-01-05  
+**Policy Version:** 2.0  
 **Enforcement:** MANDATORY
