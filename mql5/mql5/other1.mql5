@@ -1,0 +1,241 @@
+//+------------------------------------------------------------------+
+//|                                  TraderHelper_EA_REAL_V640.mq5 |
+//|  V6.40: FIX SUPORTE/RESISTÊNCIA D1 + ARRASTE + DASHBOARD COMPLETO|
+//|  BASEADO NA DOCUMENTAÇÃO OFICIAL MASTER V1.8                     |
+//+------------------------------------------------------------------+
+#property copyright "Copyright 2025, Gemini AI Bot"
+#property version   "6.40"
+#property strict
+
+#include <Trade\Trade.mqh>
+#include <Trade\PositionInfo.mqh>
+
+//--- INPUTS ---
+input group "--- SEGURANÇA CONTA REAL ---"
+input double      InpVolume           = 0.0;        // Lote (0.0 = Mínimo)
+input int         InpMaxSpread        = 45;         
+input int         InpMagicNumber      = 123456;
+input int         InpSlippage         = 30;
+input int         InpSegundosBloqueio = 5;          // Estabilização de vela
+
+input group "--- GESTÃO FINANCEIRA ---"
+input double      InpMetaFinanceira   = 50.00;      
+input double      InpDrawdownMax      = 100.00;     
+input int         InpMaxOperacoes     = 100;
+
+input group "--- FILTROS TÉCNICOS E TEMPO ---"
+input int         InpPeriodoMedia     = 10;
+input string      InpHoraNoticia      = "10:30";    
+input int         InpMinAntes         = 5;         
+input int         InpMinDepois        = 5;         
+input double      InpPercentualRomp   = 0.15;
+
+input group "--- INTERFACE VISUAL ---"
+input int         InpTamanhoFonte     = 8;
+input int         InpEixoX            = 30;
+input int         InpEixoY            = 60;
+
+//--- GLOBAIS ---
+CTrade          trade;
+int             handleSMA = INVALID_HANDLE;
+bool            g_botLigado = true, g_travaSeguranca = false;
+double          g_loteFinal = 0.01;
+datetime        g_horaInicioSessao, g_ultimaVelaTS = 0;
+string          g_gvName = "";
+
+int             g_somaCC=0, g_somaVC=0, g_totalLinhasC=0, g_totalLinhasV=0;
+double          g_saldoFechado=0, g_lucroAberto=0, g_equityProj=0;
+int             g_winsGeral=0, g_lossGeral=0, g_opsGeral=0;
+
+const string    LINHA_SUP = "TH_L_SUP", LINHA_INF = "TH_L_INF", PREFIX_V = "TH_V_";
+
+//+------------------------------------------------------------------+
+int OnInit() {
+   g_horaInicioSessao = TimeCurrent();
+   g_gvName = StringFormat("Helper_Ops_%d", InpMagicNumber);
+   
+   // PERSISTÊNCIA (DOC 1.8)
+   if(GlobalVariableCheck(g_gvName)) g_opsGeral = (int)GlobalVariableGet(g_gvName);
+   else GlobalVariableSet(g_gvName, 0);
+
+   // NORMALIZAÇÃO DE LOTE (Cálculo 1.2 Doc)
+   double mVol = SymbolInfoDouble(_Symbol, SYMBOL_VOLUME_MIN);
+   double sVol = SymbolInfoDouble(_Symbol, SYMBOL_VOLUME_STEP);
+   g_loteFinal = (InpVolume <= 0.0) ? mVol : InpVolume;
+   if(sVol > 0) g_loteFinal = MathFloor(g_loteFinal/sVol)*sVol;
+
+   trade.SetExpertMagicNumber(InpMagicNumber);
+   handleSMA = iMA(_Symbol, _Period, InpPeriodoMedia, 0, MODE_SMA, PRICE_CLOSE);
+   
+   // REGRA 1.1 DOC: START DIÁRIO (Mínima e Máxima do dia)
+   MqlRates daily[]; ArraySetAsSeries(daily, true);
+   if(CopyRates(_Symbol, PERIOD_D1, 0, 1, daily) > 0) {
+      ConfigurarLinhasMaster(daily[0].high, daily[0].low);
+   }
+   
+   EventSetTimer(1);
+   return(INIT_SUCCEEDED);
+}
+
+void OnDeinit(const int reason) { EventKillTimer(); LimparGrafico(); }
+
+void OnTick() {
+   MqlRates rates[]; ArraySetAsSeries(rates, true);
+   if(CopyRates(_Symbol, _Period, 0, 10, rates) < 10) return;
+
+   // REGRA 1.2 DOC: CAPTURA ARRASTE MANUAL
+   double pS = ObjectGetDouble(0, LINHA_SUP, OBJPROP_PRICE);
+   double pI = ObjectGetDouble(0, LINHA_INF, OBJPROP_PRICE);
+
+   CalcularFinanceiroGeral();
+   g_equityProj = g_saldoFechado + g_lucroAberto;
+
+   // Lógica de Tempo e Notícia
+   datetime serv = TimeCurrent(); datetime loc = TimeLocal();
+   datetime noticServ = (datetime)((long)StringToTime(TimeToString(loc, TIME_DATE)+" "+InpHoraNoticia) + ((long)serv-(long)loc));
+   bool emNoticia = (serv >= (noticServ - InpMinAntes*60) && serv <= (noticServ + InpMinDepois*60));
+
+   if(!g_travaSeguranca && (g_equityProj >= (InpMetaFinanceira*2) || g_equityProj <= -InpDrawdownMax || g_opsGeral >= InpMaxOperacoes)) 
+      g_travaSeguranca = true;
+
+   double smaVal = ObterSMA();
+   
+   // INTERFACE VISUAL COMPLETA (DOC 1.8)
+   AtualizarInterfaceMaster(emNoticia, noticServ - serv, smaVal);
+   AtualizarTabelaQuantificacao(rates);
+   GerenciarNuvensMaster(pS, pI);
+
+   // REGRA 3.1 DOC: ESTABILIZAÇÃO DE VELA
+   if(g_travaSeguranca || emNoticia || ((long)serv - (long)rates[0].time) < (long)InpSegundosBloqueio) return;
+   
+   ExecutarTradingMaster(rates, smaVal, pS, pI);
+}
+
+//+------------------------------------------------------------------+
+//| GERENCIAMENTO DE SUPORTE E RESISTÊNCIA (Fase 1 Doc)             |
+//+------------------------------------------------------------------+
+void ConfigurarLinhasMaster(double r, double s) { 
+   if(ObjectFind(0,LINHA_SUP)<0) ObjectCreate(0,LINHA_SUP,OBJ_HLINE,0,0,r); 
+   if(ObjectFind(0,LINHA_INF)<0) ObjectCreate(0,LINHA_INF,OBJ_HLINE,0,0,s);
+   
+   ObjectSetInteger(0,LINHA_SUP,OBJPROP_COLOR,clrDeepSkyBlue); 
+   ObjectSetInteger(0,LINHA_INF,OBJPROP_COLOR,clrOrangeRed);
+   ObjectSetInteger(0,LINHA_SUP,OBJPROP_WIDTH,2);
+   ObjectSetInteger(0,LINHA_INF,OBJPROP_WIDTH,2);
+   ObjectSetInteger(0,LINHA_SUP,OBJPROP_SELECTABLE,true); 
+   ObjectSetInteger(0,LINHA_INF,OBJPROP_SELECTABLE,true);
+}
+
+void GerenciarNuvensMaster(double pS, double pI) { 
+   double m = MathAbs(pS - pI) * 0.20; 
+   color cD = C'35,35,35'; // Charcoal Dark (DOC 1.8)
+   
+   DesenharNuvemMaster("Z1_INT", pS, pS-m, cD); // Proteção Interna Superior
+   DesenharNuvemMaster("Z1_EXT", pS, pS+m, cD); // Exaustão Externa Superior
+   DesenharNuvemMaster("Z2_INT", pI, pI+m, cD); // Proteção Interna Inferior
+   DesenharNuvemMaster("Z2_EXT", pI, pI-m, cD); // Exaustão Externa Inferior
+}
+
+void DesenharNuvemMaster(string n, double p1, double p2, color c) { 
+   string nm = PREFIX_V+n; 
+   if(ObjectFind(0,nm)<0) { 
+      ObjectCreate(0,nm,OBJ_RECTANGLE,0,0,p1,0,p2); 
+      ObjectSetInteger(0,nm,OBJPROP_FILL,true); 
+      ObjectSetInteger(0,nm,OBJPROP_BACK,true); // 90% Transparência Visual
+   }
+   ObjectSetDouble(0,nm,OBJPROP_PRICE,0,p1); 
+   ObjectSetDouble(0,nm,OBJPROP_PRICE,1,p2); 
+   ObjectSetInteger(0,nm,OBJPROP_COLOR,c); 
+   ObjectSetInteger(0,nm,OBJPROP_TIME,1,TimeCurrent()+3600*12);
+}
+
+//+------------------------------------------------------------------+
+//| EXECUÇÃO ESTRATÉGICA (Fase 3 Doc)                                |
+//+------------------------------------------------------------------+
+void ExecutarTradingMaster(MqlRates &r[], double sma, double pS, double pI) {
+   bool temPos = false; ulong ticket = 0; double lucroPos = 0;
+   if(PositionSelect(_Symbol) && PositionGetInteger(POSITION_MAGIC) == InpMagicNumber) {
+      ticket = PositionGetInteger(POSITION_TICKET);
+      lucroPos = PositionGetDouble(POSITION_PROFIT) + PositionGetDouble(POSITION_SWAP);
+      temPos = true;
+   }
+
+   double mCanal = MathAbs(pS - pI) * 0.20;
+   double protSup = pS - mCanal; double protInf = pI + mCanal;
+   double preco = r[0].close;
+   double range = r[1].high - r[1].low;
+
+   // REGRA 3.2 DOC: SAÍDA ESTRATÉGICA > 4
+   if(temPos && lucroPos > 0) {
+      bool sairCompra = (PositionGetInteger(POSITION_TYPE)==POSITION_TYPE_BUY && (g_somaVC > 4 || preco >= protSup));
+      bool sairVenda  = (PositionGetInteger(POSITION_TYPE)==POSITION_TYPE_SELL && (g_somaCC > 4 || preco <= protInf));
+      if(sairCompra || sairVenda) { if(trade.PositionClose(ticket)) ContabilizarOp(); return; }
+   }
+
+   // REGRA 3.3 DOC: TRAILING STOP TÉCNICO
+   if(temPos && r[0].time != g_ultimaVelaTS) {
+      double nSL = (PositionGetInteger(POSITION_TYPE)==POSITION_TYPE_BUY)?(r[1].low - range*0.4):(r[1].high + range*0.4);
+      trade.PositionModify(ticket, NormalizeDouble(nSL, _Digits), 0);
+      g_ultimaVelaTS = r[0].time;
+   }
+
+   // ENTRADA (CONSENSO 6/6 + SMA + ROMPIMENTO 15%)
+   if(!temPos && (int)SymbolInfoInteger(_Symbol, SYMBOL_SPREAD) <= InpMaxSpread) {
+      if((g_totalLinhasC + g_totalLinhasV) == 6) {
+         double romp = range * InpPercentualRomp;
+         if(preco > sma && preco > (r[1].high + romp) && g_totalLinhasC > g_totalLinhasV && preco < protSup) {
+            if(trade.Buy(g_loteFinal, _Symbol, SymbolInfoDouble(_Symbol, SYMBOL_ASK), r[1].low - range*0.4, 0)) ContabilizarOp();
+         }
+         else if(preco < sma && preco < (r[1].low - romp) && g_totalLinhasV > g_totalLinhasC && preco > protInf) {
+            if(trade.Sell(g_loteFinal, _Symbol, SymbolInfoDouble(_Symbol, SYMBOL_BID), r[1].high + range*0.4, 0)) ContabilizarOp();
+         }
+      }
+   }
+}
+
+//+------------------------------------------------------------------+
+//| INTERFACE VISUAL (Fase 2 Doc)                                    |
+//+------------------------------------------------------------------+
+void AtualizarInterfaceMaster(bool noticia, long sNot, double sma) {
+   int x = InpEixoX, y = InpEixoY;
+   string st = g_travaSeguranca ? "ENCERRADO" : (noticia ? "MODO NOTÍCIA" : "ATIVO | OPS: "+(string)g_opsGeral+"/100");
+   color bg = g_travaSeguranca ? clrFireBrick : (noticia ? clrOrange : clrLimeGreen);
+   
+   CriarLabel("Btn", st, x, y, bg, true);
+   CriarLabel("L1", "ATIVO: "+_Symbol+" | LOTE: "+DoubleToString(g_loteFinal, 2), x+5, y+32, clrYellow);
+   CriarLabel("L2", "TENDÊNCIA: "+(SymbolInfoDouble(_Symbol, SYMBOL_BID)>sma?"ALTA":"BAIXA"), x, y+48, (SymbolInfoDouble(_Symbol, SYMBOL_BID)>sma?clrLime:clrRed));
+   CriarLabel("L3", "PONTOS C: "+(string)g_somaCC, x, y+68, clrLime);
+   CriarLabel("L4", "PONTOS V: "+(string)g_somaVC, x+150, y+68, clrRed);
+   CriarLabel("L5", StringFormat("REAL EQUITY: $%.2f | SALDO: $%.2f", g_equityProj, g_saldoFechado), x, y+84, clrWhite);
+   CriarLabel("L6", (sNot > 0 ? "NOTÍCIA EM: "+(string)(sNot/60) + ":" + (string)(sNot%60) : "SEM EVENTOS"), x+195, y+8, clrCyan);
+}
+
+void AtualizarTabelaQuantificacao(MqlRates &r[]) {
+   g_somaCC=0; g_somaVC=0; g_totalLinhasC=0; g_totalLinhasV=0;
+   int x = InpEixoX, y = InpEixoY+130;
+   string lb[] = {"MAXIMA","ABERTURA","MINIMA","FECHAM.","H-OPEN","OPEN-L","H-CLOSE","CLOSE-L"};
+   for(int i=0; i<8; i++) {
+      CriarLabel("T_N"+(string)i, lb[i], x, y+(i*18), clrYellow);
+      double vA = ObterValor(i, 0, r); int cC=0, vC=0;
+      for(int k=1; k<=3; k++) { if(vA > ObterValor(i, k, r)) cC++; else if(vA < ObterValor(i, k, r)) vC++; }
+      if(i==5||i==6){ int t=vC; vC=cC; cC=t; }
+      if(i!=2 && i!=3) {
+         g_somaCC+=cC; g_somaVC+=vC; if(cC>vC) g_totalLinhasC++; else if(vC>cC) g_totalLinhasV++;
+         CriarLabel("T_PC"+(string)i, (string)cC, x+740, y+(i*18), (cC>vC?clrLime:clrGray));
+         CriarLabel("T_PV"+(string)i, (string)vC, x+775, y+(i*18), (vC>cC?clrRed:clrGray));
+         CriarLabel("T_RS"+(string)i, (cC>vC?"BUY ":(vC>cC?"SELL":"---")), x+815, y+(i*18), (cC>vC?clrLime:(vC>cC?clrRed:clrWhite)));
+      }
+      for(int j=1; j<=8; j++) CriarLabel("T_V"+(string)i+(string)j, DoubleToString(ObterValor(i, 8-j, r), _Digits), x+100+(j-1)*80, y+(i*18), (8-j==0?clrWhite:clrGray));
+   }
+}
+
+//--- APOIO ---
+void ContabilizarOp() { g_opsGeral++; GlobalVariableSet(g_gvName, g_opsGeral); }
+void CalcularFinanceiroGeral() { g_lucroAberto = (PositionSelect(_Symbol))?PositionGetDouble(POSITION_PROFIT):0; HistorySelect(g_horaInicioSessao, TimeCurrent()); int t=HistoryDealsTotal(); g_saldoFechado=0; for(int i=0; i<t; i++){ ulong tk=HistoryDealGetTicket(i); if(HistoryDealGetInteger(tk,DEAL_MAGIC)==InpMagicNumber){ g_saldoFechado+=HistoryDealGetDouble(tk,DEAL_PROFIT);}} }
+void CriarLabel(string n, string t, int x, int y, color c, bool btn=false) { 
+   string nm = PREFIX_V+n; if(ObjectFind(0,nm)<0) { ObjectCreate(0,nm,btn?OBJ_BUTTON:OBJ_LABEL,0,0,0); if(btn){ ObjectSetInteger(0,nm,OBJPROP_XSIZE,220); ObjectSetInteger(0,nm,OBJPROP_YSIZE,30); }}
+   ObjectSetString(0,nm,OBJPROP_TEXT,t); ObjectSetInteger(0,nm,OBJPROP_XDISTANCE,x); ObjectSetInteger(0,nm,OBJPROP_YDISTANCE,y); ObjectSetInteger(0,nm,OBJPROP_COLOR,c); ObjectSetString(0,nm,OBJPROP_FONT,"Courier New"); ObjectSetInteger(0,nm,OBJPROP_FONTSIZE,InpTamanhoFonte);
+}
+double ObterValor(int l, int idx, MqlRates &r[]) { switch(l) { case 0: return r[idx].high; case 1: return r[idx].open; case 2: return r[idx].low; case 3: return r[idx].close; case 4: return r[idx].high-r[idx].open; case 5: return r[idx].open-r[idx].low; case 6: return r[idx].high-r[idx].close; case 7: return r[idx].close-r[idx].low; } return 0; }
+double ObterSMA() { double b[]; ArraySetAsSeries(b,true); return (CopyBuffer(handleSMA,0,0,1,b)>0)?b[0]:0; }
+void LimparGrafico() { ObjectsDeleteAll(0, PREFIX_V); ObjectDelete(0, LINHA_SUP); ObjectDelete(0, LINHA_INF); ChartRedraw(); }

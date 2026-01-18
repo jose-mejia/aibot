@@ -1,0 +1,175 @@
+//+------------------------------------------------------------------+
+//|                                                        jobot.mq5 |
+//|                                  Copyright 2025, MetaQuotes Ltd. |
+//|                                             https://www.mql5.com |
+//+------------------------------------------------------------------+
+#property copyright "Copyright 2025, MetaQuotes Ltd."
+#property link      "https://www.mql5.com"
+#property version   "1.00"
+
+//+------------------------------------------------------------------+
+//| Bibliotecas Necessárias (Includes)                               |
+//+------------------------------------------------------------------+
+#include <Expert\Expert.mqh>                  // Classe base do Expert Advisor
+#include <Expert\Signal\SignalAC.mqh>         // Sinais baseados no Oscilador Acelerador (AC)
+#include <Expert\Trailing\TrailingNone.mqh>   // Nenhuma estratégia de Trailing Stop
+#include <Expert\Money\MoneyFixedLot.mqh>     // Gestão de dinheiro com Lote Fixo
+
+//+------------------------------------------------------------------+
+//| Parâmetros de Entrada (Inputs do Usuário)                        |
+//+------------------------------------------------------------------+
+//--- Configurações Gerais do Expert
+input string Expert_Title         ="Jobot";        // Nome do Robô
+ulong        Expert_MagicNumber   =999999;         // Número Mágico (Identificador Único)
+bool         Expert_EveryTick     =false;          // Processar a cada tick? (Falso = apenas nova barra)
+
+//--- Configurações de Sinal (Estratégia)
+input int    Signal_ThresholdOpen =10;         // Limite de força para ABRIR posição [0...100]
+input int    Signal_ThresholdClose=10;         // Limite de força para FECHAR posição [0...100]
+input double Signal_PriceLevel    =0.0;        // Nível de preço para execução (ordens limit/stop)
+input double Signal_StopLevel     =50.0;       // Stop Loss (em pontos)
+input double Signal_TakeLevel     =50.0;       // Take Profit (em pontos)
+input int    Signal_Expiration    =4;          // Validade das ordens pendentes (em barras)
+input double Signal_AC_Weight     =1.0;        // Peso do Oscilador Acelerador na decisão [0.0...1.0]
+
+//--- Configurações de Gestão de Dinheiro (Risco)
+input double Money_FixLot_Percent =10.0;       // Percentual (Não usado no modo Lote Fixo)
+input double Money_FixLot_Lots    =0.1;        // Volume Fixo (Lotes)
+
+//+------------------------------------------------------------------+
+//| Variáveis Globais                                                |
+//+------------------------------------------------------------------+
+CExpert ExtExpert; // Objeto principal do Expert Advisor
+
+//+------------------------------------------------------------------+
+//| Função de Inicialização (OnInit)                                 |
+//| Executada uma vez quando o robô é carregado no gráfico.          |
+//+------------------------------------------------------------------+
+int OnInit()
+  {
+   //--- 1. Inicializando o objeto Expert principal
+   if(!ExtExpert.Init(Symbol(),Period(),Expert_EveryTick,Expert_MagicNumber))
+     {
+      printf(__FUNCTION__+": erro ao inicializar objeto Expert");
+      ExtExpert.Deinit();
+      return(INIT_FAILED);
+     }
+
+   //--- 2. Configurando os Sinais (Estratégia)
+   CExpertSignal *signal = new CExpertSignal;
+   if(signal == NULL)
+     {
+      printf(__FUNCTION__+": erro ao criar objeto de sinal");
+      ExtExpert.Deinit();
+      return(INIT_FAILED);
+     }
+   
+   // Configura o sinal principal com os parâmetros de entrada
+   ExtExpert.InitSignal(signal);
+   signal.ThresholdOpen(Signal_ThresholdOpen);
+   signal.ThresholdClose(Signal_ThresholdClose);
+   signal.PriceLevel(Signal_PriceLevel);
+   signal.StopLevel(Signal_StopLevel);
+   signal.TakeLevel(Signal_TakeLevel);
+   signal.Expiration(Signal_Expiration);
+
+   //--- 3. Adicionando Filtros (Oscilador Acelerador)
+   CSignalAC *filterAC = new CSignalAC;
+   if(filterAC == NULL)
+     {
+      printf(__FUNCTION__+": erro ao criar filtro AC");
+      ExtExpert.Deinit();
+      return(INIT_FAILED);
+     }
+   // Define o peso do indicador AC na decisão final
+   signal.AddFilter(filterAC);
+   filterAC.Weight(Signal_AC_Weight);
+
+   //--- 4. Configurando Trailing Stop (Nenhum neste caso)
+   CTrailingNone *trailing = new CTrailingNone;
+   if(trailing == NULL)
+     {
+      printf(__FUNCTION__+": erro ao criar objeto trailing");
+      ExtExpert.Deinit();
+      return(INIT_FAILED);
+     }
+   if(!ExtExpert.InitTrailing(trailing))
+     {
+      printf(__FUNCTION__+": erro ao inicializar trailing");
+      ExtExpert.Deinit();
+      return(INIT_FAILED);
+     }
+
+   //--- 5. Configurando Gestão de Dinheiro (Lote Fixo)
+   CMoneyFixedLot *money = new CMoneyFixedLot;
+   if(money == NULL)
+     {
+      printf(__FUNCTION__+": erro ao criar objeto money");
+      ExtExpert.Deinit();
+      return(INIT_FAILED);
+     }
+   if(!ExtExpert.InitMoney(money))
+     {
+      printf(__FUNCTION__+": erro ao inicializar money");
+      ExtExpert.Deinit();
+      return(INIT_FAILED);
+     }
+   // Parâmetros de Lote Fixo
+   money.Percent(Money_FixLot_Percent);
+   money.Lots(Money_FixLot_Lots);
+
+   //--- 6. Validação Final das Configurações
+   if(!ExtExpert.ValidationSettings())
+     {
+      ExtExpert.Deinit();
+      return(INIT_FAILED);
+     }
+
+   //--- 7. Inicialização dos Indicadores
+   if(!ExtExpert.InitIndicators())
+     {
+      printf(__FUNCTION__+": erro ao inicializar indicadores");
+      ExtExpert.Deinit();
+      return(INIT_FAILED);
+     }
+
+   //--- Sucesso
+   return(INIT_SUCCEEDED);
+  }
+
+//+------------------------------------------------------------------+
+//| Função de Desinicialização (OnDeinit)                            |
+//| Executada quando o robô é removido do gráfico.                   |
+//+------------------------------------------------------------------+
+void OnDeinit(const int reason)
+  {
+   ExtExpert.Deinit();
+  }
+
+//+------------------------------------------------------------------+
+//| Evento de Tick (OnTick)                                          |
+//| Executada a cada variação de preço (tick).                       |
+//+------------------------------------------------------------------+
+void OnTick()
+  {
+   ExtExpert.OnTick();
+  }
+
+//+------------------------------------------------------------------+
+//| Evento de Trade (OnTrade)                                        |
+//| Executada quando ocorre uma operação de negociação.              |
+//+------------------------------------------------------------------+
+void OnTrade()
+  {
+   ExtExpert.OnTrade();
+  }
+
+//+------------------------------------------------------------------+
+//| Evento de Timer (OnTimer)                                        |
+//| Executada periodicamente caso um timer seja ativado.             |
+//+------------------------------------------------------------------+
+void OnTimer()
+  {
+   ExtExpert.OnTimer();
+  }
+//+------------------------------------------------------------------+

@@ -1,0 +1,389 @@
+//+------------------------------------------------------------------+
+//|                                                   Merged_Jobot.mq5 |
+//|  VERSÃO HÍBRIDA: TraderHelper (Visual) + AC Strategy (Indicator) |
+//|  COMBINAÇÃO DE INTERFACE RICA COM ESTRATÉGIA ROBUSTA             |
+//+------------------------------------------------------------------+
+#property copyright "Copyright 2025, Merged Jobot AI"
+#property version   "7.00"
+#property strict
+
+#include <Trade\Trade.mqh>
+#include <Trade\PositionInfo.mqh>
+
+//--- INPUTS ---
+input group "--- ESTRATÉGIA UNIFICADA ---"
+input bool        InpUsarAC           = true;       // Usar Filtro Oscilador AC?
+input int         InpPeriodoMedia     = 10;         // Período Média Móvel (SMA)
+input double      InpPercentualRomp   = 0.15;       // % Rompimento da Barra Anterior
+
+input group "--- SEGURANÇA E RISCO ---"
+input double      InpVolume           = 0.0;        // Lote (0.0 = Mínimo Automático)
+input int         InpMaxSpread        = 45;         // Spread Máximo (Pontos)
+input int         InpSlippage         = 30;         // Slippage (Pontos)
+input int         InpSegundosBloqueio = 5;          // Estabilização de vela (Segundos)
+input double      InpMetaFinanceira   = 50.00;      // Meta de Lucro Diária ($)
+input double      InpDrawdownMax      = 100.00;     // Perda Máxima Diária ($)
+input int         InpMaxOperacoes     = 100;        // Máximo de Operações/Dia
+
+input group "--- FILTRO DE HORÁRIO/NOTÍCIA ---"
+input string      InpHoraNoticia      = "10:30";    // Horário de Notícia Crítica
+input int         InpMinAntes         = 5;          // Minutos Antes da Notícia
+input int         InpMinDepois        = 5;          // Minutos Depois da Notícia
+
+input group "--- INTERFACE VISUAL ---"
+input int         InpTamanhoFonte     = 9;          // Tamanho da Fonte
+input int         InpEixoX            = 30;         // Posição X
+input int         InpEixoY            = 60;         // Posição Y
+
+//--- GLOBAIS ---
+CTrade          trade;
+int             handleSMA = INVALID_HANDLE;
+int             handleAC  = INVALID_HANDLE; // Handle do Oscilador AC
+bool            g_botLigado = true, g_travaSeguranca = false;
+double          g_loteFinal = 0.01;
+datetime        g_horaInicioSessao, g_ultimaVelaTS = 0;
+string          g_gvName = "";
+
+// Variáveis de Estatística
+int             g_somaCC=0, g_somaVC=0, g_totalLinhasC=0, g_totalLinhasV=0;
+double          g_saldoFechado=0, g_lucroAberto=0, g_equityProj=0;
+int             g_opsGeral=0;
+
+// Constantes Visuais
+const string    LINHA_SUP = "TH_L_SUP", LINHA_INF = "TH_L_INF", PREFIX_V = "TH_V_";
+
+//+------------------------------------------------------------------+
+//| Inicialização (OnInit)                                           |
+//+------------------------------------------------------------------+
+int OnInit() {
+   g_horaInicioSessao = TimeCurrent();
+   g_gvName = StringFormat("Helper_Ops_%d", _Period); // Usando Periodo para diferenciar se mudar timeframe
+   
+   // --- VALIDAÇÃO 1: Conexão e Licença ---
+   if(!TerminalInfoInteger(TERMINAL_CONNECTED)) {
+      Print("ERRO CRÍTICO: Sem conexão com servidor!");
+      return(INIT_FAILED);
+   }
+
+   // --- PERSISTÊNCIA (Recupera contagem de operações) ---
+   if(GlobalVariableCheck(g_gvName)) g_opsGeral = (int)GlobalVariableGet(g_gvName);
+   else GlobalVariableSet(g_gvName, 0);
+
+   // --- UTILITÁRIO: Cálculo Seguro de Lote (Regra de Ouro) ---
+   double mVol = SymbolInfoDouble(_Symbol, SYMBOL_VOLUME_MIN);
+   double sVol = SymbolInfoDouble(_Symbol, SYMBOL_VOLUME_STEP);
+   g_loteFinal = (InpVolume <= 0.0) ? mVol : InpVolume;
+   if(sVol > 0) g_loteFinal = MathFloor(g_loteFinal/sVol)*sVol;
+   
+   // --- CONFIGURAÇÃO TRADE ---
+   trade.SetExpertMagicNumber(123456);
+   trade.SetDeviationInPoints(InpSlippage);
+
+   // --- INDICADORES ---
+   handleSMA = iMA(_Symbol, _Period, InpPeriodoMedia, 0, MODE_SMA, PRICE_CLOSE);
+   handleAC  = iAC(_Symbol, _Period); // Indicador Accelerator Oscillator
+   
+   if(handleSMA == INVALID_HANDLE || handleAC == INVALID_HANDLE) {
+      Print("Erro ao criar indicadores!");
+      return(INIT_FAILED);
+   }
+   
+   // --- DESENHO INICIAL: Suporte/Resistência do D1 ---
+   MqlRates daily[]; ArraySetAsSeries(daily, true);
+   if(CopyRates(_Symbol, PERIOD_D1, 0, 1, daily) > 0) {
+      ConfigurarLinhasMaster(daily[0].high, daily[0].low);
+   } else {
+      Print("Aviso: Dados D1 não disponíveis ainda.");
+   }
+   
+   EventSetTimer(1); // Timer de 1 segundo para relógio
+   return(INIT_SUCCEEDED);
+}
+
+//+------------------------------------------------------------------+
+//| Desinicialização (OnDeinit)                                      |
+//+------------------------------------------------------------------+
+void OnDeinit(const int reason) { 
+   EventKillTimer(); 
+   LimparGrafico(); 
+}
+
+//+------------------------------------------------------------------+
+//| Loop Principal (OnTick)                                          |
+//+------------------------------------------------------------------+
+//+------------------------------------------------------------------+
+//| Loop Principal (OnTick)                                          |
+//+------------------------------------------------------------------+
+//+------------------------------------------------------------------+
+//| Loop Principal (OnTick)                                          |
+//+------------------------------------------------------------------+
+void OnTick() {
+   // --- VALIDAÇÃO 2: Estabilidade de Dados ---
+   MqlRates rates[]; ArraySetAsSeries(rates, true);
+   if(CopyRates(_Symbol, _Period, 0, 10, rates) < 10) return;
+
+   // 1. Atualizar Finanças
+   CalcularFinanceiroGeral();
+   g_equityProj = g_saldoFechado + g_lucroAberto;
+   
+   // 2. Filtro de Notícia (Nativo 3 Estrelas)
+   long segParaNoticia = -1;
+   bool noticiaAlta = VerificarNoticiaNativa(segParaNoticia);
+
+   // 3. Checagem de Travas de Segurança (Meta/Notícia Global)
+   CheckSafetyLocks(rates[0].time, noticiaAlta);
+   
+   // 4. Obter Indicadores
+   double smaVal = ObterSMA();
+   double acValNow = ObterAC(0);
+   double acValPrev = ObterAC(1);
+
+   // 5. Capturar Linhas Visuais (Interatividade)
+   double pS = ObjectGetDouble(0, LINHA_SUP, OBJPROP_PRICE);
+   double pI = ObjectGetDouble(0, LINHA_INF, OBJPROP_PRICE);
+   
+   // --- DASHBOARD VISUAL ATUALIZADO ---
+   bool filtroAC_Ok = (acValNow > acValPrev); 
+   AtualizarInterfaceMaster(smaVal, acValNow, filtroAC_Ok, segParaNoticia);
+   AtualizarTabelaQuantificacao(rates);
+   GerenciarNuvensMaster(pS, pI);
+
+   // --- MOTOR DE EXECUÇÃO ---
+   if(g_botLigado && !g_travaSeguranca) {
+      // Regra 3.1: Estabilização de Vela (4s)
+      if(((long)TimeCurrent() - (long)rates[0].time) < (long)InpSegundosBloqueio) return;
+      
+      // Atualização Dinâmica de Stop Loss H1 (v1.75 feature)
+      AtualizarStopH1();
+      
+      ExecutarTrading(rates, smaVal, acValNow, acValPrev, pS, pI);
+   }
+}
+
+//+------------------------------------------------------------------+
+//| LÓGICA DE TRADING (Cérebro Unificado)                            |
+//+------------------------------------------------------------------+
+void ExecutarTrading(MqlRates &r[], double sma, double acNow, double acPrev, double pS, double pI) {
+   // --- VALIDAÇÃO 3: Margem Livre ---
+   if(AccountInfoDouble(ACCOUNT_MARGIN_FREE) < (g_loteFinal * 100)) return; 
+
+   bool temPos = PositionSelect(_Symbol);
+   ulong ticket = temPos ? PositionGetInteger(POSITION_TICKET) : 0;
+   
+   // Zonas de Proteção
+   double mCanal = MathAbs(pS - pI) * 0.20;
+   double protSup = pS - mCanal; 
+   double protInf = pI + mCanal;
+   double preco = r[0].close;
+   double range = r[1].high - r[1].low;
+
+   // --- SAÍDA ESTRATÉGICA (Ponto 5 da Doc) ---
+   if(temPos) {
+      double lucroPos = PositionGetDouble(POSITION_PROFIT) + PositionGetDouble(POSITION_SWAP);
+      
+      // Regra de Saída: Pontuação Inversa >= 5 ou Toque na Zona Proteção
+      bool sairCompra = (PositionGetInteger(POSITION_TYPE)==POSITION_TYPE_BUY && (g_somaVC >= 5 || preco >= protSup));
+      bool sairVenda  = (PositionGetInteger(POSITION_TYPE)==POSITION_TYPE_SELL && (g_somaCC >= 5 || preco <= protInf));
+      
+      if((sairCompra || sairVenda) && lucroPos > 0) { 
+         trade.PositionClose(ticket); 
+         ContabilizarOp(); 
+      }
+      return; 
+   }
+
+   // --- ENTRADA (Consenso 6/6 + Filtros) ---
+   if((int)SymbolInfoInteger(_Symbol, SYMBOL_SPREAD) > InpMaxSpread) return; 
+   
+   // 1. Consenso 6/6 (Unanimidade das 6 linhas votantes)
+   bool consensoCompra = (g_totalLinhasC == 6); 
+   bool consensoVenda  = (g_totalLinhasV == 6);
+   
+   // 2. Sinal AC (Se ativado)
+   bool sinalAC_Compra = (!InpUsarAC || (acNow > acPrev && acNow > 0));
+   bool sinalAC_Venda  = (!InpUsarAC || (acNow < acPrev && acNow < 0));
+   
+   // 3. Rompimento de 15%
+   double romp = range * InpPercentualRomp;
+   
+   // >> COMPRA <<
+   if(consensoCompra && sinalAC_Compra && preco > sma && preco > (r[1].high + romp) && preco < protSup) {
+      double slH1 = CalcularStopH1(POSITION_TYPE_BUY);
+      if(trade.Buy(g_loteFinal, _Symbol, SymbolInfoDouble(_Symbol, SYMBOL_ASK), slH1, 0, "Jobot Buy H1 SL")) ContabilizarOp();
+   }
+   // >> VENDA <<
+   else if(consensoVenda && sinalAC_Venda && preco < sma && preco < (r[1].low - romp) && preco > protInf) {
+      double slH1 = CalcularStopH1(POSITION_TYPE_SELL);
+      if(trade.Sell(g_loteFinal, _Symbol, SymbolInfoDouble(_Symbol, SYMBOL_BID), slH1, 0, "Jobot Sell H1 SL")) ContabilizarOp();
+   }
+}
+
+//+------------------------------------------------------------------+
+//| FUNÇÕES DE APOIO E DASHBOARD                                     |
+//+------------------------------------------------------------------+
+void CheckSafetyLocks(datetime currentTime, bool newsActive) {
+   // Trava Financeira
+   if(!g_travaSeguranca && (g_equityProj >= (InpMetaFinanceira*2) || g_equityProj <= -InpDrawdownMax || g_opsGeral >= InpMaxOperacoes)) {
+      g_travaSeguranca = true; 
+   }
+   
+   // Filtro de Notícia (Ativado pela função nativa agora)
+   if(newsActive) g_botLigado = false; 
+   else if(!g_travaSeguranca) g_botLigado = true;
+}
+
+// --- INTEGRAÇÃO V1.75: CALENDÁRIO NATIVO ---
+bool VerificarNoticiaNativa(long &segundosRestantes) {
+   MqlCalendarValue values[];
+   datetime inicio = TimeCurrent() - (InpMinAntes * 60); // Usa input do merged
+   datetime fim    = TimeCurrent() + (InpMinDepois * 60);
+   
+   // Verifica calendário para o par atual e USD
+   string baseCurr = SymbolInfoString(_Symbol, SYMBOL_CURRENCY_BASE);
+   string profitCurr = SymbolInfoString(_Symbol, SYMBOL_CURRENCY_PROFIT);
+   
+   if(CalendarValueGet(values, inicio, fim, baseCurr) > 0 || CalendarValueGet(values, inicio, fim, profitCurr) > 0 || CalendarValueGet(values, inicio, fim, "USD") > 0) {
+      for(int i=0; i<ArraySize(values); i++) {
+         MqlCalendarEvent ev;
+         CalendarEventById(values[i].event_id, ev);
+         // Apenas Alta Importância
+         if(ev.importance == CALENDAR_IMPORTANCE_HIGH) {
+            segundosRestantes = (long)values[i].time - (long)TimeCurrent();
+            return true;
+         }
+      }
+   }
+   return false;
+}
+
+// --- INTEGRAÇÃO V1.75: STOP LOSS DINÂMICO H1 ---
+double CalcularStopH1(long tipo) {
+   MqlRates r[]; ArraySetAsSeries(r, true);
+   // Pega a vela H1 anterior
+   if(CopyRates(_Symbol, PERIOD_H1, 1, 1, r) <= 0) return 0;
+   
+   double range = (r[0].high - r[0].low) * 0.5; // 50% do tamanho da vela H1
+   
+   if(tipo == POSITION_TYPE_BUY) return NormalizeDouble(r[0].low - range, _Digits);
+   else return NormalizeDouble(r[0].high + range, _Digits);
+}
+
+void AtualizarStopH1() {
+   if(PositionSelect(_Symbol) && PositionGetInteger(POSITION_MAGIC) == 123456) { // Magic hardcoded for match
+      double nSL = CalcularStopH1(PositionGetInteger(POSITION_TYPE));
+      double currSL = PositionGetDouble(POSITION_SL);
+      
+      // Só move se a diferença for relevante (> ponto) e a favor (opcional, aqui move sempre para acompanhar volatilidade)
+      if(nSL > 0 && MathAbs(nSL - currSL) > _Point) {
+          trade.PositionModify(PositionGetInteger(POSITION_TICKET), nSL, 0);
+      }
+   }
+}
+
+void AtualizarInterfaceMaster(double sma, double ac, bool acUp, long sNot) {
+   int x = InpEixoX, y = InpEixoY;
+   color corStatus = g_travaSeguranca ? clrOrange : (g_botLigado ? clrLime : clrRed);
+   string txtStatus = g_travaSeguranca ? "LIMITE ATINGIDO" : (g_botLigado ? "ATIVO" : "MODO NOTÍCIA");
+
+   // Painel Superior
+   CriarLabel("STATUS_BOX", txtStatus + " | OPS: "+(string)g_opsGeral+"/"+(string)InpMaxOperacoes, x, y, corStatus, true);
+   
+   // Timer de Notícia
+   string txtTimer = "SEM EVENTOS (3*)";
+   color corTimer = clrCyan;
+   if(sNot != -1) {
+       txtTimer = StringFormat("NOTÍCIA EM: %02d:%02d:%02d", sNot/3600, (sNot%3600)/60, sNot%60);
+       if(sNot < 300) corTimer = clrRed; // 5 min finais alerta vermelho
+   }
+   CriarLabel("L_TIMER", txtTimer, x+220, y+8, corTimer);
+
+   // Info Ativo/Lote
+   CriarLabel("L_INFO", "ATIVO: "+_Symbol+" | LOTE: "+DoubleToString(g_loteFinal, 2), x+5, y+32, clrYellow);
+   
+   // Performance Financeira
+   CriarLabel("L_SMA", "TENDÊNCIA SMA 10: " + (SymbolInfoDouble(_Symbol, SYMBOL_BID)>sma?"ALTA":"BAIXA"), x, y+48, (SymbolInfoDouble(_Symbol, SYMBOL_BID)>sma?clrLime:clrRed));
+   CriarLabel("L_PONTOS", StringFormat("PONTOS C: %d | PONTOS V: %d", g_somaCC, g_somaVC), x, y+64, clrWhite);
+   
+   // Métricas de Conta e Wins/Loss (Simulado com base no saldo positivo/negativo das operações hoje)
+   CriarLabel("L_FIN", StringFormat("REAL EQUITY: %.2f | LUCRO ABERTO: %.2f", g_equityProj, g_lucroAberto), x, y+80, clrWhite);
+   CriarLabel("L_RES", StringFormat("SALDO FECHADO: %.2f", g_saldoFechado), x, y+96, (g_saldoFechado>=0?clrLime:clrRed));
+}
+
+void AtualizarTabelaQuantificacao(MqlRates &r[]) {
+   g_somaCC=0; g_somaVC=0; g_totalLinhasC=0; g_totalLinhasV=0;
+   int x = InpEixoX, y = InpEixoY+130; 
+   
+   // Títulos das Colunas (V0 a V7)
+   CriarLabel("H_METRICA", "MÉTRICA", x, y-15, clrWhite);
+   for(int j=0; j<8; j++) CriarLabel("H_VAL"+(string)j, "V-"+(string)j, x+100+j*60, y-15, (j==0?clrWhite:clrGray));
+   CriarLabel("H_RES", "RESULTADO", x+600, y-15, clrWhite); // Ajustado X
+
+   string lb[] = {"MAXIMA","ABERTURA","MINIMA","FECHAM.","H-OPEN","OPEN-L","H-CLOSE","CLOSE-L"};
+   
+   for(int i=0; i<8; i++) {
+      CriarLabel("T_N"+(string)i, lb[i], x, y+(i*18), clrYellow);
+      
+      double vA = ObterValor(i, 0, r); int cC=0, vC=0;
+      
+      // Lógica de Comparação: V0 vs V1..V3
+      for(int k=1; k<=3; k++) { 
+         if(vA > ObterValor(i, k, r)) cC++; 
+         else if(vA < ObterValor(i, k, r)) vC++; 
+      }
+      
+      if(i==5||i==6){ int t=vC; vC=cC; cC=t; }
+      
+      // Contabilização (Regra da Doc: i!=2 e i!=3 são as linhas operacionais)
+      // Doc diz: Máxima, Abertura, Mínima, Fechamento... Linhas 2(Min) e 3(Close)?
+      // Other1 ignorava 2 e 3 na contagem GLOBAL. Vamos manter consistência com Other1 que usava isso.
+      if(i!=2 && i!=3) {
+         g_somaCC+=cC; g_somaVC+=vC; 
+         if(cC>vC) g_totalLinhasC++; else if(vC>cC) g_totalLinhasV++;
+         
+         // Display Resultado da Linha
+         string sRes = (cC>vC?"BUY ("+(string)cC+")":(vC>cC?"SELL ("+(string)vC+")":"--"));
+         CriarLabel("T_RES"+(string)i, sRes, x+600, y+(i*18), (cC>vC?clrLime:(vC>cC?clrRed:clrGray)));
+      }
+      
+      // Valores Históricos (V0 a V7)
+      for(int j=0; j<8; j++) {
+         string valStr = DoubleToString(ObterValor(i, j, r), _Digits);
+         color cVal = (j==0) ? clrWhite : clrGray; // V0 em Branco destaque
+         CriarLabel("T_V"+(string)i+(string)j, valStr, x+100+j*60, y+(i*18), cVal);
+      }
+   }
+}
+
+// --- UTILS ---
+void ConfigurarLinhasMaster(double r, double s) { 
+   if(ObjectFind(0,LINHA_SUP)<0) ObjectCreate(0,LINHA_SUP,OBJ_HLINE,0,0,r); 
+   if(ObjectFind(0,LINHA_INF)<0) ObjectCreate(0,LINHA_INF,OBJ_HLINE,0,0,s);
+   ObjectSetInteger(0,LINHA_SUP,OBJPROP_COLOR,clrDeepSkyBlue); ObjectSetInteger(0,LINHA_SUP,OBJPROP_WIDTH,2);
+   ObjectSetInteger(0,LINHA_INF,OBJPROP_COLOR,clrOrangeRed);   ObjectSetInteger(0,LINHA_INF,OBJPROP_WIDTH,2);
+}
+void GerenciarNuvensMaster(double pS, double pI) { 
+   double m = MathAbs(pS - pI) * 0.20; color cD = C'35,35,35';
+   DesenharNuvemMaster("Z1", pS, pS-m, cD); DesenharNuvemMaster("Z2", pI, pI+m, cD);
+}
+void DesenharNuvemMaster(string n, double p1, double p2, color c) { 
+   string nm = PREFIX_V+n; if(ObjectFind(0,nm)<0) { ObjectCreate(0,nm,OBJ_RECTANGLE,0,0,p1,0,p2); ObjectSetInteger(0,nm,OBJPROP_FILL,true); ObjectSetInteger(0,nm,OBJPROP_BACK,true); }
+   ObjectSetDouble(0,nm,OBJPROP_PRICE,0,p1); ObjectSetDouble(0,nm,OBJPROP_PRICE,1,p2); ObjectSetInteger(0,nm,OBJPROP_COLOR,c); ObjectSetInteger(0,nm,OBJPROP_TIME,1,TimeCurrent()+3600*12);
+}
+void CriarLabel(string n, string t, int x, int y, color c, bool btn=false) { 
+   string nm = PREFIX_V+n; if(ObjectFind(0,nm)<0) { ObjectCreate(0,nm,btn?OBJ_BUTTON:OBJ_LABEL,0,0,0); if(btn){ ObjectSetInteger(0,nm,OBJPROP_XSIZE,220); ObjectSetInteger(0,nm,OBJPROP_YSIZE,30); }}
+   ObjectSetString(0,nm,OBJPROP_TEXT,t); ObjectSetInteger(0,nm,OBJPROP_XDISTANCE,x); ObjectSetInteger(0,nm,OBJPROP_YDISTANCE,y); ObjectSetInteger(0,nm,OBJPROP_COLOR,c); ObjectSetInteger(0,nm,OBJPROP_FONTSIZE,InpTamanhoFonte);
+}
+void ContabilizarOp() { g_opsGeral++; GlobalVariableSet(g_gvName, g_opsGeral); }
+void CalcularFinanceiroGeral() { 
+   g_lucroAberto = (PositionSelect(_Symbol))?PositionGetDouble(POSITION_PROFIT):0; 
+   HistorySelect(g_horaInicioSessao, TimeCurrent()); 
+   g_saldoFechado=0; 
+   for(int i=0; i<HistoryDealsTotal(); i++){ 
+      ulong tk=HistoryDealGetTicket(i); 
+      if(HistoryDealGetInteger(tk,DEAL_MAGIC)==123456) g_saldoFechado+=HistoryDealGetDouble(tk,DEAL_PROFIT);
+   } 
+}
+void LimparGrafico() { ObjectsDeleteAll(0, PREFIX_V); ObjectDelete(0, LINHA_SUP); ObjectDelete(0, LINHA_INF); ChartRedraw(); }
+double ObterValor(int l, int idx, MqlRates &r[]) { switch(l) { case 0: return r[idx].high; case 1: return r[idx].open; case 2: return r[idx].low; case 3: return r[idx].close; } return 0; }
+double ObterSMA() { double b[]; ArraySetAsSeries(b,true); return (CopyBuffer(handleSMA,0,0,1,b)>0)?b[0]:0; }
+double ObterAC(int i) { double b[]; ArraySetAsSeries(b,true); return (CopyBuffer(handleAC,0,i,1,b)>0)?b[0]:0; }
